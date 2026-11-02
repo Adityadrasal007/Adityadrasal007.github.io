@@ -1,0 +1,124 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Design tokens — Tech Universe
+   void      : page background (mandated #0A0A0A)
+   graphite  : raised card surface
+   panel     : brighter panel surface
+   line      : hairline borders
+   ash       : primary text (mandated #E5E2E1)
+   dim       : secondary text
+   signal    : HUD amber — the detection-frame accent
+------------------------------------------------------------------- */
+@theme {
+  --font-geist: 'Geist', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --color-void: #0a0a0a;
+  --color-graphite: #121214;
+  --color-panel: #17171b;
+  --color-line: #26262b;
+  --color-ash: #e5e2e1;
+  --color-dim: #8e8e96;
+  --color-signal: #ffb224;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #0a0a0a;
+  color: #e5e2e1;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(255, 178, 36, 0.28);
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #232327;
+  border-radius: 8px;
+  border: 2px solid #0a0a0a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a41;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(255, 178, 36, 0.75);
+  outline-offset: 2px;
+}
+
+/* Used by the certificate reel character animation */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slow diagonal drift for the global grid field */
+@keyframes gridDrift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 48px 48px;
+  }
+}
+.grid-drift {
+  animation: gridDrift 16s linear infinite;
+}
+
+/* Blinking cursor for HUD readouts */
+@keyframes hudBlink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+.hud-blink {
+  animation: hudBlink 1.1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .grid-drift,
+  .hud-blink {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

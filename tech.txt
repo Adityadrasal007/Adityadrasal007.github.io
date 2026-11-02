@@ -1,0 +1,344 @@
+================================================================================
+                    TECH UNIVERSE PORTFOLIO — ALL DETAILS
+                              ADITYA RASAL
+================================================================================
+
+
+================================================================================
+1. PERSONAL INFORMATION
+================================================================================
+
+Full Name       : Aditya Rasal
+Page Title      : Aditya Rasal
+Email           : adityadrasal007@gmail.com
+WhatsApp        : +91 9673736448
+LinkedIn        : https://linkedin.com/in/adityarasal007 
+GitHub          : https://github.com/Adityadrasal007
+Instagram       : https://instagram.com/aditya_rasal007
+Landing Email   : adityadrasal007@gmail.com
+Landing WhatsApp: https://wa.me/9673736448
+
+
+================================================================================
+2. HERO SECTION
+================================================================================
+
+Headline        : ADITYA RASAL (scramble text animation)
+Tagline         : I AM A
+  - Computer Science Engineer
+  - Project Manager
+  - AI Engineer
+instead of 1196 use AI Builder
+instead of creative designer use Aditya Rasal
+instead of ali imam use Computer Science Engineer
+================================================================================
+3. ABOUT SECTION
+================================================================================
+
+Section Title   : Who am I?
+Subtitle        : Solving business problems through technology one meaningful
+                  product at a time.
+
+About Cards:
+  1. Scalable Applications
+     I build robust, scalable applications engineered to grow clean
+     architecture, maintainable code, production-ready.
+
+  2. Working with AI
+     From computer vision to LLM-powered systems, I work at the frontier
+     of applied artificial intelligence.
+
+  3. Automation
+     I automate the repetitive so teams can focus on what matters —
+     pipelines, workflows, and intelligent agents.
+
+  4. Managing Large Teams
+     Leading 200+ person teams across technical events and projects,
+     aligning people around a shared outcome.
+
+  5. Project Execution
+     End-to-end ownership: planning, coordination, and delivery under
+     pressure — ideas shipped, not shelved.
+
+Bottom Quote    : Building meaningful software where engineering rigor meets
+                  real-world impact.
+
+
+================================================================================
+4. EXPERIENCE SECTION
+================================================================================
+
+Section Title   : Where I've Made an Impact
+
+Experience 1:
+  Title         : AI Vision Intern
+  Organization  : Mahindra
+  Tag           : Artificial Intelligence
+  Description   : Contributing to cutting-edge artificial intelligence and
+                  computer vision solutions, optimizing models for real-world
+                  applications and deep learning tasks.
+
+Experience 2:
+  Title         : Event Manager
+  Organization  : IEEE Student Chapter
+  Tag           : Event Strategy
+  Description   : Coordinating cross-functional teams and logistics to
+                  successfully execute technical events and initiatives like
+                  IDEATHON 2.0, bridging the gap between ideas and impact.
+
+Experience 3:
+  Title         : Event Lead
+  Organization  : PCU Student Council
+  Tag           : Leadership
+  Description   : Spearheading large-scale campus events and acting as the
+                  Event Head for Anantam, managing end-to-end event execution,
+                  team leadership, and university coordination.
+
+
+================================================================================
+5. SKILLS SECTION (Technical Arsenal — Tools & Technologies)
+================================================================================
+
+Category: AI & Computer Vision
+  - YOLO
+  - OpenCV
+  - LLMs
+  - Prompt Engineering
+  - AI Automation
+  - Image Processing
+
+Category: Frontend
+  - HTML5
+  - CSS3
+  - Tailwind CSS
+  - Bootstrap
+  - React.js
+  - Next.js
+
+Category: Backend
+  - Node.js
+  - REST APIs
+  - API Integration
+
+Category: Database
+  - MongoDB
+  - Mongoose
+  - MySQL
+
+Category: Languages
+  - Python
+  - C
+  - SQL
+
+Category: Cloud & DevOps
+  - Linux
+  - Git
+  - GitHub
+
+================================================================================
+6. TOOLS & WORKFLOW SECTION (My Arsenal)
+================================================================================
+
+Section Title   : Tools & Workflow I Use
+Description     : An extensive ecosystem of AI models, development environments,
+                  and productivity platforms that power my daily workflow and
+                  drive innovation.
+
+  - ChatGPT
+  - Claude
+  - Gemini
+  - Ollama
+  - Open WebUI
+  - LM Studio
+  - OpenRouter
+  - Kaggle
+  - Roboflow
+  - Label Studio
+  - CVAT
+  - VS Code
+  - Cursor
+  - IntelliJ IDEA
+  - Eclipse
+  - PyCharm
+  - Jupyter
+  - Google Colab
+  - Notion
+  - Jira
+  - Microsoft Teams
+  - Google Workspace
+  
+================================================================================
+7. CERTIFICATIONS SECTION (Proof of Work)
+================================================================================
+
+1. IBM Machine Learning
+   Issuer : Coursera
+   URL    : https://coursera.org/share/7b43520f1463ce7ca54112642e89beba
+
+2. Software Engineering
+   Issuer : Coursera
+   URL    : https://coursera.org/share/dbde08ed5f5f8d49e6a5423d02c3c409
+
+3. Foundations of Project Management
+   Issuer : Coursera
+   URL    : https://coursera.org/share/ce8f64070935c48fc3ccedfc821693cd
+
+4. Project Planning: Putting It All Together
+   Issuer : Coursera
+   URL    : https://coursera.org/share/a7f15a71f866e57260b87ee33712ebd6
+
+5. Project Initiation: Starting a Successful Project
+   Issuer : Coursera
+   URL    : https://coursera.org/share/d256de4405258d2874ba3b869ec33272
+
+6. Agile with Atlassian Jira
+   Issuer : Coursera
+   URL    : https://coursera.org/share/be9f1eb5dca128ff078999158a725fc1
+
+7. Agile Project Management
+   Issuer : Coursera
+   URL    : https://coursera.org/share/5d89105c522cfb91aaf949552f3296f1
+
+8. Django Web Framework
+   Issuer : Coursera
+   URL    : https://coursera.org/share/58a477a175a7225adda7c4b30eab54d0
+
+9. Programming for Everybody (Getting Started with Python)
+   Issuer : Coursera
+   URL    : https://coursera.org/share/f5954f1ce27fcb08131f819790bc0154
+
+
+================================================================================
+8. RECOMMENDATIONS SECTION (What People Say)
+================================================================================
+
+ 1. "An absolute powerhouse. The way he architected our Django backend while
+     simultaneously leading a 50+ person event team was mind-blowing."
+     — Sarah, VP of Engineering
+
+ 2. "I've never seen a student leader execute a campus fest with such
+     professional precision. The logistics were flawless."
+     — Dr. Mehta, University Director
+
+ 3. "His contributions during the computer vision internship directly
+     improved our model's accuracy. Exceptional problem-solving skills."
+     — Rajesh, AI Lead
+
+ 4. "The Flutter app he delivered for us has a 5-star user rating. The
+     UI/UX is incredibly smooth and responsive."
+     — Elena, Startup Founder
+
+ 5. "Bridging the gap between technical execution and team management is
+     rare. He does both effortlessly."
+     — Michael, Technical Project Manager
+
+ 6. "Spearheaded our entire ideathon initiative. His strategic planning
+     set a new benchmark for all our future events."
+     — Priya, Student Council President
+
+ 7. "Clean code, scalable architecture, and a keen eye for design. What
+     more could you ask for in a full-stack developer?"
+     — David, Senior Software Engineer
+
+ 8. "His YOLO object detection implementation was highly optimized for
+     our edge devices. Truly impressive work."
+     — Anita, Research Scientist
+
+ 9. "From securing sponsors to managing the on-ground logistics for 1000+
+     attendees, his leadership is unparalleled."
+     — Vikram, Event Coordinator
+
+10. "He doesn't just write code; he builds solutions that actually matter.
+     The mental health app architecture was brilliant."
+     — Sophie, Product Manager
+
+11. "A rare talent who is equally comfortable debugging a complex React
+     state and negotiating with event vendors."
+     — James, Operations Director
+
+12. "His understanding of modern aesthetic design, right down to cinematic
+     lighting and sharp UI, makes his frontend work stand out."
+     — Clara, Lead UX Designer
+
+13. "We handed him a messy legacy database. Within a week, he had it
+     migrated, optimized, and connected to a sleek FastAPI backend."
+     — Omar, CTO
+
+14. "The energy and dedication he brought to organizing DevFest was
+     contagious. He elevated the entire experience."
+     — Nina, Community Manager
+
+15. "If you need someone to take ownership of a massive, high-stakes
+     project and deliver under pressure, he is your guy."
+     — Marcus, Engineering Manager
+
+16. "His integration of LLMs into our existing workflow saved us over
+     20 hours a week. A true AI automation expert."
+     — Tara, Operations Lead
+
+17. "Always steps up when things get tough. During the campus festival
+     crisis, his calm decision-making saved the day."
+     — Rahul, Core Committee Member
+
+18. "Master of both worlds: he can debate the purity of whey protein in
+     the morning and deploy a full-stack app in the evening."
+     — Jason, Co-Founder
+
+19. "His Python scripts automated our entire data processing pipeline.
+     Extremely reliable and bug-free code."
+     — Aisha, Data Analyst
+
+20. "One of the most driven, ambitious, and capable student developers
+     I have had the pleasure of mentoring."
+     — Prof. Sharma, CS Department
+
+
+================================================================================
+9. CONTACT / FOOTER SECTION
+================================================================================
+
+Section Title   : CONTACT ME
+Tagline         : Architecting scalable Vision Models and engineering
+                  unforgettable events. Let's build something extraordinary
+                  together.
+
+Contact Links:
+  - Email     : adityadrasal007@gmail.com
+  - WhatsApp  : https://wa.me/919673736448
+  - LinkedIn  : https://linkedin.com/in/adityarasal007 
+  - GitHub    : https://github.com/Adityadrasal007
+  - Instagram : https://instagram.com/aditya_rasal007
+
+Footer Nav:
+  - About
+  - Experience
+  - Certifications
+  - Download Resume (highlighted CTA)
+
+Copyright       : © 2026 Aditya Rasal. Built with Love
+Background Text : ADITYA RASAL
+
+
+================================================================================
+10. TECH STACK & DESIGN DETAILS
+================================================================================
+
+Framework       : React 18 (Vite)
+Router          : React Router DOM v7
+Styling         : Tailwind CSS v4
+Animations      : Framer Motion
+Icons           : Lucide React, React Icons
+Fonts           : Geist (headings), Inter (body) — Google Fonts
+Color Scheme    : Dark theme (#0A0A0A background, #e5e2e1 text)
+Visual Effects  : Animated grid background, vignette overlay, scroll progress
+                  bar, text scramble, text rotate, marquee tool rows,
+                  3D card carousel, animated certificate reel
+
+Assets:
+  - src/assets/tech.jpg     (Tech Universe profile photo)
+  - src/assets/personal.png (Personal Universe profile photo)
+  - src/assets/ also contain all the certificates with proper name
+
+================================================================================
+                           END OF TECH UNIVERSE DATA
+================================================================================

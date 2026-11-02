@@ -1,0 +1,193 @@
+"use client"; 
+import React from "react"; 
+import Link from "next/link"; 
+import { 
+  Linkedin, 
+  Github, 
+  Mail, 
+  Instagram, 
+  MessageCircle, // Used to represent WhatsApp in Lucide 
+  Briefcase, 
+} from "lucide-react"; 
+import { cn } from "@/lib/utils"; 
+ 
+interface FooterLink { 
+  label: string; 
+  href: string; 
+  isHighlight?: boolean; 
+} 
+ 
+interface SocialLink { 
+  icon: React.ReactNode; 
+  href: string; 
+  label: string; 
+} 
+ 
+interface FooterProps { 
+  title?: string; 
+  backgroundText?: string; 
+  description?: string; 
+  socialLinks?: SocialLink[]; 
+  navLinks?: FooterLink[]; 
+  brandIcon?: React.ReactNode; 
+  className?: string; 
+} 
+ 
+export const ContactFooter = ({ 
+  title = "CONTACT ME", 
+  backgroundText = "ADITYA RASAL", 
+  description = "Architecting scalable web applications and engineering unforgettable events. Let's 
+build something extraordinary together.", 
+  socialLinks = [ 
+    { 
+      icon: <Mail />, 
+      href: "mailto:adityadrasal007@gmail.com", 
+      label: "Email", 
+    }, 
+    { 
+      icon: <MessageCircle />, 
+      href: "https://wa.me/919673736448", 
+      label: "WhatsApp", 
+    }, 
+    { 
+      icon: <Linkedin />, 
+      href: "https://linkedin.com/in/your-profile", 
+      label: "LinkedIn", 
+    }, 
+    { 
+      icon: <Github />, 
+      href: "https://github.com/your-username", 
+      label: "GitHub", 
+    }, 
+    { 
+      icon: <Instagram />, 
+      href: "https://instagram.com/your-handle", 
+      label: "Instagram", 
+    }, 
+  ], 
+  navLinks = [ 
+    { label: "Projects", href: "#projects" }, 
+    { label: "Experience", href: "#experience" }, 
+    { label: "Certifications", href: "#certifications" }, 
+    { label: "Download Resume", href: "YOUR_DRIVE_LINK_HERE", isHighlight: true }, 
+  ], 
+  brandIcon, 
+  className, 
+}: FooterProps) => { 
+  return ( 
+    <section className={cn("relative w-full mt-0 overflow-hidden", className)}> 
+      <footer className="border-t border-gray-800 bg-[#0A0A0A] mt-20 relative"> 
+        <div className="max-w-7xl flex flex-col justify-between mx-auto min-h-[30rem] 
+sm:min-h-[35rem] md:min-h-[40rem] relative p-4 py-10"> 
+           
+          <div className="flex flex-col mb-12 sm:mb-20 md:mb-0 w-full z-20"> 
+            <div className="w-full flex flex-col items-center"> 
+               
+              <div className="space-y-4 flex flex-col items-center flex-1 mb-8"> 
+                <div className="flex items-center gap-2"> 
+                  <h2 className="text-white text-4xl md:text-5xl font-bold tracking-tight"> 
+                    {title} 
+                  </h2> 
+                </div> 
+                <p className="text-gray-400 font-medium text-center w-full max-w-lg px-4 sm:px-0 
+leading-relaxed"> 
+                  {description} 
+                </p> 
+              </div> 
+ 
+              {/* Social Links Row */} 
+              {socialLinks.length > 0 && ( 
+                <div className="flex mb-10 gap-6"> 
+                  {socialLinks.map((link, index) => ( 
+                    <Link 
+                      key={index} 
+                      href={link.href} 
+                      className="text-gray-400 hover:text-white hover:scale-110 transition-all 
+duration-300" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      title={link.label} 
+                    > 
+                      <div className="w-7 h-7"> 
+                        {link.icon} 
+                      </div> 
+                      <span className="sr-only">{link.label}</span> 
+                    </Link> 
+                  ))} 
+                </div> 
+              )} 
+ 
+              {/* Navigation & Resume Links */} 
+              {navLinks.length > 0 && ( 
+                <div className="flex flex-wrap justify-center items-center gap-6 text-sm font-medium 
+text-gray-400 max-w-full px-4"> 
+                  {navLinks.map((link, index) => ( 
+                    <Link 
+                      key={index} 
+                      className={cn( 
+                        "transition-all duration-300", 
+                        link.isHighlight  
+                          ? "bg-white text-black px-6 py-2.5 rounded-full font-bold hover:bg-gray-200 
+shadow-lg hover:shadow-white/20"  
+                          : "hover:text-white hover:font-semibold" 
+                      )} 
+                      href={link.href} 
+                      target={link.isHighlight ? "_blank" : "_self"} 
+                      rel={link.isHighlight ? "noopener noreferrer" : ""} 
+                    > 
+                      {link.label} 
+                    </Link> 
+                  ))} 
+                </div> 
+              )} 
+            </div> 
+          </div> 
+ 
+          {/* Copyright Section */} 
+          <div className="mt-20 md:mt-24 flex flex-col items-center justify-center z-20 px-4 md:px-0"> 
+            <p className="text-sm text-gray-500 text-center"> 
+              © {new Date().getFullYear()} Aditya Rasal. Built with Next.js & Tailwind. 
+            </p> 
+          </div> 
+        </div> 
+ 
+        {/* Large background text */} 
+        <div  
+          className="bg-gradient-to-b from-gray-800/30 via-gray-900/10 to-transparent bg-clip-text 
+text-transparent leading-none absolute left-1/2 -translate-x-1/2 bottom-32 md:bottom-24 
+font-extrabold tracking-tighter pointer-events-none select-none text-center px-4 z-0 w-full 
+whitespace-nowrap" 
+          style={{ 
+            fontSize: 'clamp(4rem, 16vw, 14rem)', 
+          }} 
+        > 
+          {backgroundText} 
+        </div> 
+ 
+        {/* Bottom floating icon */} 
+        <div className="absolute hover:border-gray-500 transition-colors duration-400 
+drop-shadow-[0_0px_20px_rgba(255,255,255,0.1)] bottom-24 md:bottom-20 backdrop-blur-md 
+rounded-3xl bg-black/60 left-1/2 border border-gray-800 flex items-center justify-center p-3 -translate-x-1/2 z-30"> 
+          <div className="w-12 sm:w-16 md:w-20 h-12 sm:h-16 md:h-20 bg-gradient-to-br 
+from-gray-800 to-black rounded-2xl flex items-center justify-center shadow-inner border 
+border-gray-700"> 
+            {brandIcon || ( 
+              <Briefcase className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-gray-300 
+drop-shadow-md" /> 
+            )} 
+          </div> 
+        </div> 
+ 
+        {/* Bottom line */} 
+        <div className="absolute bottom-32 sm:bottom-30 backdrop-blur-sm h-[1px] bg-gradient-to-r 
+from-transparent via-gray-700 to-transparent w-full left-1/2 -translate-x-1/2 z-10"></div> 
+ 
+        {/* Bottom shadow fade */} 
+        <div className="bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/80 blur-[1em] to-transparent 
+absolute bottom-0 w-full h-32 z-10 pointer-events-none"></div> 
+      </footer> 
+    </section> 
+  ); 
+}; 
+ 
+export default ContactFooter;

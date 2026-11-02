@@ -1,0 +1,316 @@
+"use client"; 
+ 
+import React, { useState, useEffect } from 'react'; 
+import { ChevronLeft, ChevronRight } from 'lucide-react'; 
+import { cn } from '@/lib/utils'; // Make sure this utility exists in your project 
+ 
+const SQRT_5000 = Math.sqrt(5000); 
+ 
+// 20 Tailored placeholders reflecting Full-Stack, AI, and Event Leadership 
+const recommendations = [ 
+  { 
+    tempId: 0, 
+    testimonial: "An absolute powerhouse. The way he architected our Django backend while 
+simultaneously leading a 50+ person event team was mind-blowing.", 
+    by: "Sarah, VP of Engineering", 
+    imgSrc: "https://i.pravatar.cc/150?img=1" 
+  }, 
+  { 
+    tempId: 1, 
+    testimonial: "I've never seen a student leader execute a campus fest with such professional 
+precision. The logistics were flawless.", 
+    by: "Dr. Mehta, University Director", 
+    imgSrc: "https://i.pravatar.cc/150?img=2" 
+  }, 
+  { 
+    tempId: 2, 
+    testimonial: "His contributions during the computer vision internship directly improved our model's 
+accuracy. Exceptional problem-solving skills.", 
+    by: "Rajesh, AI Lead", 
+    imgSrc: "https://i.pravatar.cc/150?img=3" 
+  }, 
+  { 
+    tempId: 3, 
+    testimonial: "The Flutter app he delivered for us has a 5-star user rating. The UI/UX is incredibly 
+smooth and responsive.", 
+    by: "Elena, Startup Founder", 
+    imgSrc: "https://i.pravatar.cc/150?img=4" 
+  }, 
+  { 
+    tempId: 4, 
+    testimonial: "Bridging the gap between technical execution and team management is rare. He 
+does both effortlessly.", 
+    by: "Michael, Technical Project Manager", 
+    imgSrc: "https://i.pravatar.cc/150?img=5" 
+  }, 
+  { 
+    tempId: 5, 
+    testimonial: "Spearheaded our entire ideathon initiative. His strategic planning set a new 
+benchmark for all our future events.", 
+    by: "Priya, Student Council President", 
+    imgSrc: "https://i.pravatar.cc/150?img=6" 
+  }, 
+  { 
+    tempId: 6, 
+    testimonial: "Clean code, scalable architecture, and a keen eye for design. What more could you 
+ask for in a full-stack developer?", 
+    by: "David, Senior Software Engineer", 
+    imgSrc: "https://i.pravatar.cc/150?img=7" 
+  }, 
+  { 
+    tempId: 7, 
+    testimonial: "His YOLO object detection implementation was highly optimized for our edge 
+devices. Truly impressive work.", 
+    by: "Anita, Research Scientist", 
+    imgSrc: "https://i.pravatar.cc/150?img=8" 
+  }, 
+  { 
+    tempId: 8, 
+    testimonial: "From securing sponsors to managing the on-ground logistics for 1000+ attendees, 
+his leadership is unparalleled.", 
+    by: "Vikram, Event Coordinator", 
+    imgSrc: "https://i.pravatar.cc/150?img=9" 
+  }, 
+  { 
+    tempId: 9, 
+    testimonial: "He doesn't just write code; he builds solutions that actually matter. The mental health 
+app architecture was brilliant.", 
+    by: "Sophie, Product Manager", 
+    imgSrc: "https://i.pravatar.cc/150?img=10" 
+  }, 
+  { 
+    tempId: 10, 
+    testimonial: "A rare talent who is equally comfortable debugging a complex React state and 
+negotiating with event vendors.", 
+    by: "James, Operations Director", 
+    imgSrc: "https://i.pravatar.cc/150?img=11" 
+  }, 
+  { 
+    tempId: 11, 
+    testimonial: "His understanding of modern aesthetic design, right down to cinematic lighting and 
+sharp UI, makes his frontend work stand out.", 
+    by: "Clara, Lead UX Designer", 
+    imgSrc: "https://i.pravatar.cc/150?img=12" 
+  }, 
+  { 
+    tempId: 12, 
+    testimonial: "We handed him a messy legacy database. Within a week, he had it migrated, 
+optimized, and connected to a sleek FastAPI backend.", 
+    by: "Omar, CTO", 
+    imgSrc: "https://i.pravatar.cc/150?img=13" 
+  }, 
+  { 
+    tempId: 13, 
+    testimonial: "The energy and dedication he brought to organizing DevFest was contagious. He 
+elevated the entire experience.", 
+    by: "Nina, Community Manager", 
+    imgSrc: "https://i.pravatar.cc/150?img=14" 
+  }, 
+  { 
+    tempId: 14, 
+    testimonial: "If you need someone to take ownership of a massive, high-stakes project and 
+deliver under pressure, he is your guy.", 
+    by: "Marcus, Engineering Manager", 
+    imgSrc: "https://i.pravatar.cc/150?img=15" 
+  }, 
+  { 
+    tempId: 15, 
+    testimonial: "His integration of LLMs into our existing workflow saved us over 20 hours a week. A 
+true AI automation expert.", 
+    by: "Tara, Operations Lead", 
+    imgSrc: "https://i.pravatar.cc/150?img=16" 
+  }, 
+  { 
+    tempId: 16, 
+    testimonial: "Always steps up when things get tough. During the campus festival crisis, his calm 
+decision-making saved the day.", 
+    by: "Rahul, Core Committee Member", 
+    imgSrc: "https://i.pravatar.cc/150?img=17" 
+  }, 
+  { 
+    tempId: 17, 
+    testimonial: "Master of both worlds: he can debate the purity of whey protein in the morning and 
+deploy a full-stack app in the evening.", 
+    by: "Jason, Co-Founder", 
+    imgSrc: "https://i.pravatar.cc/150?img=18" 
+  }, 
+  { 
+    tempId: 18, 
+    testimonial: "His Python scripts automated our entire data processing pipeline. Extremely reliable 
+and bug-free code.", 
+    by: "Aisha, Data Analyst", 
+    imgSrc: "https://i.pravatar.cc/150?img=19" 
+  }, 
+  { 
+    tempId: 19, 
+    testimonial: "One of the most driven, ambitious, and capable student developers I have had the 
+pleasure of mentoring.", 
+    by: "Prof. Sharma, CS Department", 
+    imgSrc: "https://i.pravatar.cc/150?img=20" 
+  } 
+]; 
+ 
+interface TestimonialCardProps { 
+  position: number; 
+  testimonial: typeof recommendations[0]; 
+  handleMove: (steps: number) => void; 
+  cardSize: number; 
+} 
+ 
+const TestimonialCard: React.FC<TestimonialCardProps> = ({  
+  position,  
+  testimonial,  
+  handleMove,  
+  cardSize  
+}) => { 
+  const isCenter = position === 0; 
+ 
+  return ( 
+    <div 
+      onClick={() => handleMove(position)} 
+      className={cn( 
+        "absolute left-1/2 top-1/2 cursor-pointer p-8 transition-all duration-500 ease-in-out", 
+        isCenter  
+          ? "z-10 bg-[#EFEFEF] text-black border-none" // Light theme for active center card 
+          : "z-0 bg-[#111111] text-white border border-gray-800 hover:border-gray-600" // Dark theme 
+for background cards 
+      )} 
+      style={{ 
+        width: cardSize, 
+        height: cardSize, 
+        clipPath: `polygon(50px 0%, calc(100% - 50px) 0%, 100% 50px, 100% 100%, calc(100% - 
+50px) 100%, 50px 100%, 0 100%, 0 0)`, 
+        transform: ` 
+          translate(-50%, -50%)  
+          translateX(${(cardSize / 1.5) * position}px) 
+          translateY(${isCenter ? -30 : position % 2 ? 15 : -15}px) 
+          rotate(${isCenter ? 0 : position % 2 ? 3 : -3}deg) 
+        `, 
+        boxShadow: isCenter ? "0px 20px 40px -10px rgba(0,0,0,0.5)" : "0px 0px 0px 0px transparent" 
+      }} 
+    > 
+      {/* Folded Corner Element */} 
+      <span 
+        className={cn( 
+          "absolute block origin-top-right rotate-45", 
+          isCenter ? "bg-gray-300" : "bg-gray-800" 
+        )} 
+        style={{ 
+          right: -2, 
+          top: 48, 
+          width: SQRT_5000, 
+          height: 2 
+        }} 
+      /> 
+       
+      <img 
+        src={testimonial.imgSrc} 
+        alt={`${testimonial.by.split(',')[0]}`} 
+        className="mb-6 h-14 w-14 rounded-sm object-cover object-center grayscale 
+hover:grayscale-0 transition-all duration-300" 
+        style={{ 
+          boxShadow: isCenter ? "3px 3px 0px rgba(0,0,0,0.1)" : "3px 3px 0px rgba(255,255,255,0.05)" 
+        }} 
+      /> 
+       
+      <h3 className={cn( 
+        "text-base sm:text-xl font-medium leading-relaxed tracking-tight", 
+        isCenter ? "text-gray-900" : "text-gray-200" 
+      )}> 
+        "{testimonial.testimonial}" 
+      </h3> 
+       
+      <p className={cn( 
+        "absolute bottom-8 left-8 right-8 mt-4 text-sm font-medium", 
+        isCenter ? "text-gray-600" : "text-gray-400" 
+      )}> 
+        — {testimonial.by} 
+      </p> 
+    </div> 
+  ); 
+}; 
+ 
+export const StaggerTestimonials: React.FC = () => { 
+  const [cardSize, setCardSize] = useState(365); 
+  const [testimonialsList, setTestimonialsList] = useState(recommendations); 
+ 
+  const handleMove = (steps: number) => { 
+    const newList = [...testimonialsList]; 
+    if (steps > 0) { 
+      for (let i = steps; i > 0; i--) { 
+        const item = newList.shift(); 
+        if (!item) return; 
+        newList.push({ ...item, tempId: Math.random() }); 
+      } 
+    } else { 
+      for (let i = steps; i < 0; i++) { 
+        const item = newList.pop(); 
+        if (!item) return; 
+        newList.unshift({ ...item, tempId: Math.random() }); 
+      } 
+    } 
+    setTestimonialsList(newList); 
+  }; 
+ 
+  useEffect(() => { 
+    const updateSize = () => { 
+      const { matches } = window.matchMedia("(min-width: 640px)"); 
+      setCardSize(matches ? 380 : 300); // Slightly larger for better text fitting 
+    }; 
+ 
+    updateSize(); 
+    window.addEventListener("resize", updateSize); 
+    return () => window.removeEventListener("resize", updateSize); 
+  }, []); 
+ 
+  return ( 
+    <div 
+      className="relative w-full overflow-hidden bg-[#0A0A0A]" 
+      style={{ height: 600 }} 
+    > 
+      {/* Cards Container */} 
+      {testimonialsList.map((testimonial, index) => { 
+        const position = testimonialsList.length % 2 
+          ? index - (testimonialsList.length + 1) / 2 
+          : index - testimonialsList.length / 2; 
+        return ( 
+          <TestimonialCard 
+            key={testimonial.tempId} 
+            testimonial={testimonial} 
+            handleMove={handleMove} 
+            position={position} 
+            cardSize={cardSize} 
+          /> 
+        ); 
+      })} 
+ 
+      {/* Navigation Buttons */} 
+      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-3 z-20"> 
+        <button 
+          onClick={() => handleMove(-1)} 
+          className={cn( 
+            "flex h-12 w-12 items-center justify-center text-white transition-all rounded-full", 
+            "bg-[#111111] border border-gray-800 hover:bg-white hover:text-black hover:scale-105", 
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500" 
+          )} 
+          aria-label="Previous recommendation" 
+        > 
+          <ChevronLeft size={20} /> 
+        </button> 
+        <button 
+          onClick={() => handleMove(1)} 
+          className={cn( 
+            "flex h-12 w-12 items-center justify-center text-white transition-all rounded-full", 
+            "bg-[#111111] border border-gray-800 hover:bg-white hover:text-black hover:scale-105", 
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500" 
+          )} 
+          aria-label="Next recommendation" 
+        > 
+          <ChevronRight size={20} /> 
+        </button> 
+      </div> 
+    </div> 
+  ); 
+}; 
+ 
+export default StaggerTestimonials; 

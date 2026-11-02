@@ -1,0 +1,166 @@
+npm install framer-motion react-icons lucide-react 
+import React from "react"; 
+import { motion } from "framer-motion"; 
+import {  
+  Bot,  
+  Terminal,  
+  Globe,  
+  Cpu,  
+  Network,  
+  Image as ImageIcon,  
+  Tag,  
+  Crop, 
+  MousePointer2, 
+  Zap 
+} from "lucide-react"; 
+import {  
+  SiOpenai,  
+  SiGoogle,  
+  SiJupyter,  
+  SiGooglecolab,  
+  SiKaggle,  
+  SiVisualstudiocode,  
+  SiIntellijidea,  
+  SiEclipseide,  
+  SiPycharm,  
+  SiNotion,  
+  SiJira,  
+  SiTrello,  
+  SiSlack,  
+  SiMicrosoftteams, 
+  SiAnthropic 
+} from "react-icons/si"; 
+ 
+// Row 1: AI, ML, and Vision Tools 
+const toolsRow1 = [ 
+  { name: "ChatGPT", icon: SiOpenai, color: "#10a37f" }, 
+  { name: "Claude", icon: SiAnthropic, color: "#D97757" }, 
+  { name: "Gemini", icon: SiGoogle, color: "#4285F4" }, 
+  { name: "Ollama", icon: Terminal, color: "#FFFFFF" }, 
+  { name: "Open WebUI", icon: Globe, color: "#3b82f6" }, 
+  { name: "LM Studio", icon: Cpu, color: "#8b5cf6" }, 
+  { name: "OpenRouter", icon: Network, color: "#eab308" }, 
+  { name: "Kaggle", icon: SiKaggle, color: "#20BEFF" }, 
+  { name: "Roboflow", icon: ImageIcon, color: "#E116A4" }, 
+  { name: "Label Studio", icon: Tag, color: "#FF7B00" }, 
+  { name: "CVAT", icon: Crop, color: "#007BFF" }, 
+]; 
+ 
+// Row 2: IDEs, Notebooks, and Productivity 
+const toolsRow2 = [ 
+  { name: "VS Code", icon: SiVisualstudiocode, color: "#007ACC" }, 
+  { name: "Cursor", icon: MousePointer2, color: "#FFFFFF" }, 
+  { name: "IntelliJ IDEA", icon: SiIntellijidea, color: "#FF318C" }, 
+  { name: "Eclipse", icon: SiEclipseide, color: "#2C2255" }, 
+  { name: "PyCharm", icon: SiPycharm, color: "#000000" }, 
+  { name: "Jupyter", icon: SiJupyter, color: "#F37626" }, 
+  { name: "Colab", icon: SiGooglecolab, color: "#F9AB00" }, 
+  { name: "Notion", icon: SiNotion, color: "#FFFFFF" }, 
+  { name: "Jira", icon: SiJira, color: "#0052CC" }, 
+  { name: "Trello", icon: SiTrello, color: "#0052CC" }, 
+  { name: "Slack", icon: SiSlack, color: "#4A154B" }, 
+  { name: "Teams", icon: SiMicrosoftteams, color: "#6264A7" }, 
+  { name: "Workspace", icon: SiGoogle, color: "#4285F4" }, 
+]; 
+ 
+export default function ToolsIntegrationHero() { 
+  return ( 
+    <section className="bg-black min-h-[80vh] flex flex-col items-center justify-center py-20 
+font-sans overflow-hidden"> 
+       
+      {/* Header Section */} 
+      <div className="flex flex-col items-center text-center px-4 mb-16 z-10"> 
+        <div className="flex items-center gap-2 border border-gray-800 bg-gray-900/50 rounded-full 
+px-4 py-1.5 mb-8"> 
+          <Zap size={14} className="text-yellow-500" /> 
+          <span className="text-gray-300 text-sm font-medium">My Arsenal</span> 
+        </div> 
+         
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight"> 
+          Integrate with favorite tools 
+        </h2> 
+         
+        <p className="text-gray-400 text-lg max-w-2xl"> 
+          An extensive ecosystem of AI models, development environments, and productivity platforms 
+that power my daily workflow and drive innovation. 
+        </p> 
+      </div> 
+ 
+      {/* Marquee Section with Gradient Mask */} 
+      {/* The mask-image creates the seamless fade on the left and right edges */} 
+      <div  
+        className="w-full max-w-[1400px] relative flex flex-col gap-8" 
+        style={{ 
+          maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)", 
+          WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)" 
+        }} 
+      > 
+         
+        {/* Row 1 - Scrolling Left */} 
+        <div className="flex w-full overflow-hidden"> 
+          <motion.div 
+            className="flex gap-6 whitespace-nowrap min-w-full" 
+            animate={{ x: ["0%", "-50%"] }} 
+            transition={{ 
+              repeat: Infinity, 
+              ease: "linear", 
+              duration: 30, // Adjust speed here 
+            }} 
+          > 
+            {/* Double the array to create a seamless infinite loop */} 
+            {[...toolsRow1, ...toolsRow1].map((tool, index) => ( 
+              <div  
+                key={index}  
+                className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full 
+bg-[#111111] border border-gray-800 shrink-0 hover:bg-gray-800 transition-colors group relative" 
+              > 
+                <tool.icon  
+                  size={40}  
+                  className="text-gray-400 group-hover:scale-110 transition-all duration-300" 
+                  style={{ color: tool.name === "PyCharm" ? "#fff" : tool.color }} // Quick fix for dark icons 
+on dark bg 
+                /> 
+                <span className="absolute -bottom-8 opacity-0 group-hover:opacity-100 text-xs 
+text-gray-300 transition-opacity"> 
+                  {tool.name} 
+                </span> 
+              </div> 
+            ))} 
+          </motion.div> 
+        </div> 
+ 
+        {/* Row 2 - Scrolling Right */} 
+        <div className="flex w-full overflow-hidden"> 
+          <motion.div 
+            className="flex gap-6 whitespace-nowrap min-w-full" 
+            animate={{ x: ["-50%", "0%"] }} // Reverses the direction 
+            transition={{ 
+              repeat: Infinity, 
+              ease: "linear", 
+              duration: 35, // Slightly different duration for staggered effect 
+            }} 
+          > 
+            {[...toolsRow2, ...toolsRow2].map((tool, index) => ( 
+              <div  
+                key={index}  
+                className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full 
+bg-[#111111] border border-gray-800 shrink-0 hover:bg-gray-800 transition-colors group relative" 
+              > 
+                <tool.icon  
+                  size={40}  
+                  className="text-gray-400 group-hover:scale-110 transition-all duration-300" 
+                  style={{ color: tool.name === "PyCharm" ? "#fff" : tool.color }} 
+                /> 
+                <span className="absolute -bottom-8 opacity-0 group-hover:opacity-100 text-xs 
+text-gray-300 transition-opacity"> 
+                  {tool.name} 
+                </span> 
+              </div> 
+            ))} 
+          </motion.div> 
+        </div> 
+ 
+      </div> 
+    </section> 
+  ); 
+} 
