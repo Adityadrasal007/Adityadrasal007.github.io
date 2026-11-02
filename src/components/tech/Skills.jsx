@@ -301,65 +301,76 @@ export function Skills() {
 
         {/* Master Controls & Telemetry */}
         <div className="flex flex-wrap items-center gap-3">
-          <button
+          <motion.button
             type="button"
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
             onClick={() => setFanAll((prev) => !prev)}
             className={cn(
-              'inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 font-mono text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer',
+              'inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 font-mono text-xs uppercase tracking-wider transition-colors duration-200 cursor-pointer select-none',
               fanAll
-                ? 'border-signal bg-signal/15 text-signal font-semibold shadow-[0_0_20px_rgba(255,87,34,0.2)]'
-                : 'border-line bg-graphite/70 text-dim hover:border-line hover:text-ash',
+                ? 'border-signal bg-signal/15 text-signal font-semibold shadow-[0_0_20px_rgba(255,178,36,0.2)]'
+                : 'border-white/[0.08] bg-white/[0.03] text-dim hover:border-white/20 hover:text-ash',
             )}
           >
             <Layers size={14} />
             <span>{fanAll ? 'Collapse Decks' : 'Fan All Decks'}</span>
-          </button>
+          </motion.button>
 
-          <span className="rounded-xl border border-line bg-void px-3 py-2 font-mono text-xs text-dim">
+          <span className="rounded-xl border border-white/[0.08] bg-white/[0.02] px-3 py-2 font-mono text-xs text-dim shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
             <strong className="text-signal font-semibold">{totalTools}</strong> Frameworks ·{' '}
             <strong className="text-ash font-semibold">{FOLDER_DECKS.length}</strong> Decks
           </span>
         </div>
       </div>
 
-      {/* Domain Category Filter Tabs */}
-      <div className="mt-10 flex flex-wrap items-center gap-2 border-b border-line/60 pb-5">
+      {/* Domain Category Filter Tabs — Apple Segmented Control */}
+      <div className="mt-10 flex flex-wrap items-center gap-1.5 border-b border-line/60 pb-5">
         <button
           type="button"
           onClick={() => setActiveFilter('all')}
           className={cn(
-            'rounded-full px-3.5 py-1.5 font-mono text-xs uppercase tracking-wider transition-all cursor-pointer',
+            'relative rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors duration-200 cursor-pointer select-none active:scale-95',
             activeFilter === 'all'
-              ? 'bg-ash text-void font-bold shadow-md'
-              : 'border border-line bg-graphite/60 text-dim hover:text-ash hover:border-line/80',
+              ? 'text-white font-bold'
+              : 'text-dim hover:text-ash',
           )}
         >
-          All Domains ({FOLDER_DECKS.length})
+          {activeFilter === 'all' && (
+            <motion.div
+              layoutId="activeSkillTab"
+              className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]"
+              transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+            />
+          )}
+          <span className="relative z-10">All Domains ({FOLDER_DECKS.length})</span>
         </button>
-        {FOLDER_DECKS.map((d) => (
-          <button
-            key={d.id}
-            type="button"
-            onClick={() => setActiveFilter(d.id)}
-            className={cn(
-              'rounded-full px-3.5 py-1.5 font-mono text-xs uppercase tracking-wider transition-all cursor-pointer',
-              activeFilter === d.id
-                ? 'border text-white font-semibold'
-                : 'border border-line/60 bg-void/60 text-dim hover:text-ash',
-            )}
-            style={
-              activeFilter === d.id
-                ? {
-                    backgroundColor: `${d.accentColor}20`,
-                    borderColor: d.accentColor,
-                    color: '#ffffff',
-                  }
-                : undefined
-            }
-          >
-            {d.title}
-          </button>
-        ))}
+        {FOLDER_DECKS.map((d) => {
+          const isActive = activeFilter === d.id;
+          return (
+            <button
+              key={d.id}
+              type="button"
+              onClick={() => setActiveFilter(d.id)}
+              className={cn(
+                'relative rounded-full px-4 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors duration-200 cursor-pointer select-none active:scale-95',
+                isActive
+                  ? 'text-white font-semibold'
+                  : 'text-dim hover:text-ash',
+              )}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="activeSkillTab"
+                  className="absolute inset-0 rounded-full bg-white/[0.12] border border-white/20 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2)]"
+                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                />
+              )}
+              <span className="relative z-10">{d.title}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Interactive Folder Grid */}

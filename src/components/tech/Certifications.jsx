@@ -235,7 +235,7 @@ export function ScrollReelCertifications({ certifications = certData, charStagge
       tabIndex={0}
       onKeyDown={onKeyDown}
       className={cn(
-        'relative flex w-full max-w-[1280px] flex-col items-stretch gap-4 overflow-hidden rounded-2xl border border-line bg-[#0A0A0A] outline-none focus-visible:ring-2 focus-visible:ring-gray-600 md:min-h-[480px] lg:min-h-[520px] md:flex-row',
+        'relative flex w-full max-w-[1280px] flex-col items-stretch gap-4 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0A0A0A] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_24px_60px_-12px_rgba(0,0,0,0.8)] outline-none focus-visible:ring-2 focus-visible:ring-signal/80 md:min-h-[480px] lg:min-h-[520px] md:flex-row',
         className,
       )}
     >

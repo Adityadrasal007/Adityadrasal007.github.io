@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { SectionHeading } from '../ui/SectionHeading';
 import { GhostNumber } from '../ui/GhostNumber';
 import { recommendations } from '../../data/techData';
 import { cn } from '../../lib/utils';
 
 /*
- * Recommendations — tech_component/recommendation.txt
- * (StaggerTestimonials): an arc of folded-corner cards, light card in
- * the center, click or arrows to rotate through all twenty quotes.
+ * Recommendations — Apple Fluid Testimonial Carousel:
+ * - Fluid arc positioning with physical depth.
+ * - Apple tactile feedback on navigation controls.
+ * - Keyboard navigation (Left / Right arrows).
  */
 
 const SQRT_5000 = Math.sqrt(5000);
@@ -20,10 +22,10 @@ function TestimonialCard({ position, testimonial, handleMove, cardSize }) {
     <div
       onClick={() => handleMove(position)}
       className={cn(
-        'absolute left-1/2 top-1/2 cursor-pointer p-8 transition-all duration-500 ease-in-out',
+        'absolute left-1/2 top-1/2 cursor-pointer p-8 transition-all duration-500 ease-out select-none',
         isCenter
-          ? 'z-10 border-none bg-[#EFEFEF] text-black'
-          : 'z-0 border border-gray-800 bg-[#111111] text-white hover:border-gray-600',
+          ? 'z-10 border border-white/20 bg-[#F4F4F6] text-black shadow-[0_24px_50px_-10px_rgba(0,0,0,0.65)]'
+          : 'z-0 border border-white/[0.08] bg-[#121214]/90 text-white backdrop-blur-xl hover:border-white/20 shadow-[0_12px_30px_rgba(0,0,0,0.5)]',
       )}
       style={{
         width: cardSize,
@@ -36,32 +38,31 @@ function TestimonialCard({ position, testimonial, handleMove, cardSize }) {
           translateY(${isCenter ? -30 : position % 2 ? 15 : -15}px)
           rotate(${isCenter ? 0 : position % 2 ? 3 : -3}deg)
         `,
-        boxShadow: isCenter ? '0px 20px 40px -10px rgba(0,0,0,0.5)' : '0px 0px 0px 0px transparent',
       }}
     >
       {/* Folded corner element */}
       <span
         className={cn(
           'absolute block origin-top-right rotate-45',
-          isCenter ? 'bg-gray-300' : 'bg-gray-800',
+          isCenter ? 'bg-gray-300' : 'bg-white/10',
         )}
         style={{ right: -2, top: 48, width: SQRT_5000, height: 2 }}
       />
 
-      <img
-        src={testimonial.imgSrc}
-        alt={testimonial.by.split(',')[0]}
-        loading="lazy"
-        className="mb-6 h-14 w-14 rounded-sm object-cover object-center grayscale transition-all duration-300 hover:grayscale-0"
-        style={{
-          boxShadow: isCenter ? '3px 3px 0px rgba(0,0,0,0.1)' : '3px 3px 0px rgba(255,255,255,0.05)',
-        }}
-      />
+      <div className="flex items-center justify-between mb-6">
+        <img
+          src={testimonial.imgSrc}
+          alt={testimonial.by.split(',')[0]}
+          loading="lazy"
+          className="h-14 w-14 rounded-xl object-cover object-center grayscale transition-all duration-300 hover:grayscale-0 shadow-md"
+        />
+        <Quote className={cn('h-6 w-6 opacity-30', isCenter ? 'text-black' : 'text-signal')} />
+      </div>
 
       <h3
         className={cn(
-          'text-xs sm:text-sm leading-relaxed tracking-tight font-medium line-clamp-6',
-          isCenter ? 'text-gray-900' : 'text-gray-200',
+          'text-xs sm:text-sm leading-relaxed tracking-[-0.005em] font-medium line-clamp-6',
+          isCenter ? 'text-gray-900 font-semibold' : 'text-gray-200',
         )}
       >
         &ldquo;{testimonial.testimonial}&rdquo;
@@ -69,8 +70,8 @@ function TestimonialCard({ position, testimonial, handleMove, cardSize }) {
 
       <p
         className={cn(
-          'absolute bottom-6 left-8 right-8 text-xs sm:text-xs font-semibold tracking-wide',
-          isCenter ? 'text-gray-700' : 'text-signal/90',
+          'absolute bottom-6 left-8 right-8 text-xs font-mono uppercase tracking-wider',
+          isCenter ? 'text-gray-700 font-bold' : 'text-signal/90 font-medium',
         )}
       >
         — {testimonial.by}
@@ -83,7 +84,7 @@ export function Recommendations() {
   const [cardSize, setCardSize] = useState(365);
   const [testimonialsList, setTestimonialsList] = useState(recommendations);
 
-  const handleMove = (steps) => {
+  const handleMove = useCallback((steps) => {
     const newList = [...testimonialsList];
     if (steps > 0) {
       for (let i = steps; i > 0; i--) {
@@ -99,6 +100,17 @@ export function Recommendations() {
       }
     }
     setTestimonialsList(newList);
+  }, [testimonialsList]);
+
+  // Keyboard navigation
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      handleMove(-1);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      handleMove(1);
+    }
   };
 
   useEffect(() => {
@@ -113,15 +125,20 @@ export function Recommendations() {
   }, []);
 
   return (
-    <section id="recommendations" className="relative overflow-x-clip py-28 md:py-32">
+    <section
+      id="recommendations"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      className="relative overflow-x-clip py-28 md:py-32 outline-none"
+    >
       <GhostNumber depth={0.35} className="-top-4 right-2">
         06
       </GhostNumber>
       <SectionHeading
-        index={6}
-        label="Signals"
-        title="What People Say"
-        className="mb-4 px-6"
+        label="Peer Endorsements"
+        title="What Leaders & Peers Say"
+        subtitle="Unfiltered feedback from cross-functional engineering teams, mentors, and executives"
+        className="mb-6 px-6"
       />
 
       <div className="relative w-full overflow-hidden" style={{ height: 600 }}>
@@ -141,32 +158,29 @@ export function Recommendations() {
           );
         })}
 
-        {/* Navigation buttons */}
-        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-3">
-          <button
+        {/* Apple-style Translucent Control Pill */}
+        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/[0.08] bg-black/60 p-1.5 backdrop-blur-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_12px_32px_rgba(0,0,0,0.6)]">
+          <motion.button
             type="button"
+            whileTap={{ scale: 0.9 }}
             onClick={() => handleMove(-1)}
-            className={cn(
-              'flex h-12 w-12 cursor-pointer items-center justify-center rounded-full text-white transition-all',
-              'border border-gray-800 bg-[#111111] hover:scale-105 hover:bg-white hover:text-black',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500',
-            )}
+            className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/[0.05] text-white transition-colors hover:bg-white/15 active:bg-white/20"
             aria-label="Previous recommendation"
           >
-            <ChevronLeft size={20} />
-          </button>
-          <button
+            <ChevronLeft size={18} />
+          </motion.button>
+          <span className="px-3 font-mono text-xs uppercase tracking-wider text-dim">
+            Scroll or Use Keys
+          </span>
+          <motion.button
             type="button"
+            whileTap={{ scale: 0.9 }}
             onClick={() => handleMove(1)}
-            className={cn(
-              'flex h-12 w-12 cursor-pointer items-center justify-center rounded-full text-white transition-all',
-              'border border-gray-800 bg-[#111111] hover:scale-105 hover:bg-white hover:text-black',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500',
-            )}
+            className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/[0.05] text-white transition-colors hover:bg-white/15 active:bg-white/20"
             aria-label="Next recommendation"
           >
-            <ChevronRight size={20} />
-          </button>
+            <ChevronRight size={18} />
+          </motion.button>
         </div>
       </div>
     </section>

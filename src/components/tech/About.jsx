@@ -44,9 +44,9 @@ const itemVariants = {
 function Card({ className, children }) {
   return (
     <TiltCard
-      maxTilt={5}
+      maxTilt={4}
       className={cn(
-        'h-full rounded-lg border border-line bg-graphite shadow-sm transition-colors duration-300 hover:border-signal/40',
+        'h-full rounded-2xl border border-white/[0.08] bg-[#121214]/85 backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_12px_36px_-12px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-signal/40 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16),0_18px_48px_-12px_rgba(0,0,0,0.8)]',
         className,
       )}
     >

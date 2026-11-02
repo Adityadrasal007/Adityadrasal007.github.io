@@ -4,12 +4,13 @@ import { GhostNumber } from '../ui/GhostNumber';
 import { toolsSection, toolsRow1, toolsRow2 } from '../../data/techData';
 
 /*
- * Tools — tech_component/tools.txt (ToolsIntegrationHero): badge header
- * plus two counter-scrolling marquee rows of tool tiles with an edge
- * fade mask. Title and tool list come from tech.txt.
+ * Tools — Apple Refined Counter-Scrolling Marquee:
+ * - Frosted glass orb tiles with specular top-edge lighting.
+ * - Smooth hover scale and instant touch feedback.
+ * - Gentle linear loop with reduced-motion support.
  */
 
-function MarqueeRow({ tools, direction = 'left', duration = 30 }) {
+function MarqueeRow({ tools, direction = 'left', duration = 32 }) {
   const reduced = useReducedMotion();
   const from = direction === 'left' ? '0%' : '-50%';
   const to = direction === 'left' ? '-50%' : '0%';
@@ -25,15 +26,16 @@ function MarqueeRow({ tools, direction = 'left', duration = 30 }) {
         {[...tools, ...tools].map((tool, index) => (
           <div
             key={`${tool.name}-${index}`}
-            className="group relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full border border-gray-800 bg-[#111111] transition-colors hover:bg-gray-800 md:h-24 md:w-24"
+            className="group relative flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/[0.08] bg-[#121214]/80 backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_8px_24px_-6px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-signal/50 hover:bg-[#18181c] hover:shadow-[0_12px_32px_rgba(255,178,36,0.15)] active:scale-95 cursor-pointer md:h-24 md:w-24"
           >
             <tool.Icon
-              size={40}
+              size={38}
               aria-label={tool.name}
-              className="transition-all duration-300 group-hover:scale-110"
+              className="transition-transform duration-300 group-hover:scale-110"
               style={{ color: tool.color }}
             />
-            <span className="absolute -bottom-8 text-xs text-gray-300 opacity-0 transition-opacity group-hover:opacity-100">
+            {/* Apple-style floating badge tooltip */}
+            <span className="pointer-events-none absolute -bottom-9 rounded-full border border-white/10 bg-black/85 px-2.5 py-1 font-mono text-[11px] text-ash opacity-0 shadow-lg backdrop-blur-md transition-all duration-200 group-hover:-translate-y-1 group-hover:opacity-100">
               {tool.name}
             </span>
           </div>
@@ -47,37 +49,45 @@ export function Tools() {
   return (
     <section
       id="tools"
-      className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden py-20 font-sans"
+      className="relative flex min-h-[75vh] flex-col items-center justify-center overflow-hidden py-24 font-sans"
     >
       <GhostNumber depth={0.35} className="left-2 top-6">
-        04
+        05
       </GhostNumber>
 
-      {/* Header */}
+      {/* Header with Apple Frosted Glass Pill */}
       <div className="z-10 mb-16 flex flex-col items-center px-4 text-center">
-        <div className="mb-8 flex items-center gap-2 rounded-full border border-gray-800 bg-gray-900/50 px-4 py-1.5">
-          <Zap size={14} className="text-yellow-500" aria-hidden="true" />
-          <span className="text-sm font-medium text-gray-300">{toolsSection.badge}</span>
-        </div>
+        <motion.div
+          whileHover={{ y: -1 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+          className="mb-6 flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5 backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]"
+        >
+          <Zap size={13} className="text-signal" aria-hidden="true" />
+          <span className="font-mono text-xs uppercase tracking-wider text-dim">
+            {toolsSection.badge}
+          </span>
+        </motion.div>
 
-        <h2 className="mb-6 font-geist text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+        <h2 className="mb-4 font-geist text-3xl font-extrabold tracking-[-0.03em] text-ash sm:text-4xl md:text-5xl lg:text-6xl leading-[1.08]">
           {toolsSection.title}
         </h2>
 
-        <p className="max-w-2xl text-lg text-gray-400">{toolsSection.description}</p>
+        <p className="max-w-2xl text-sm leading-relaxed tracking-[-0.005em] text-dim sm:text-base md:text-lg">
+          {toolsSection.description}
+        </p>
       </div>
 
-      {/* Marquee rows with edge fade mask */}
+      {/* Marquee rows with soft gradient edge mask */}
       <div
         className="relative flex w-full max-w-[1400px] flex-col"
         style={{
-          maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+          maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
           WebkitMaskImage:
-            'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+            'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
         }}
       >
-        <MarqueeRow tools={toolsRow1} direction="left" duration={30} />
-        <MarqueeRow tools={toolsRow2} direction="right" duration={35} />
+        <MarqueeRow tools={toolsRow1} direction="left" duration={32} />
+        <MarqueeRow tools={toolsRow2} direction="right" duration={36} />
       </div>
     </section>
   );

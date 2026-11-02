@@ -156,6 +156,53 @@ export function Projects() {
         telemetry benchmarks, and production edge deployment highlights.
       </p>
 
+      {/* Apple-style Segmented Control Switcher for Instant Wayfinding & Direct Manipulation */}
+      <div className="mt-8 flex justify-center">
+        <div className="inline-flex rounded-full border border-white/[0.08] bg-black/40 p-1.5 backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]">
+          <button
+            type="button"
+            onClick={() => handleSelectProject('vision-flow')}
+            className={cn(
+              'relative rounded-full px-5 py-2 font-mono text-xs uppercase tracking-wider transition-colors duration-200 cursor-pointer select-none active:scale-95',
+              activeProjectId === 'vision-flow' ? 'text-white font-semibold' : 'text-dim hover:text-ash',
+            )}
+          >
+            {activeProjectId === 'vision-flow' && (
+              <motion.div
+                layoutId="activeProjectCapsule"
+                className="absolute inset-0 rounded-full bg-signal/20 border border-signal/40 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]"
+                transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-signal" />
+              01 / Vision Flow
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSelectProject('vision-studio')}
+            className={cn(
+              'relative rounded-full px-5 py-2 font-mono text-xs uppercase tracking-wider transition-colors duration-200 cursor-pointer select-none active:scale-95',
+              activeProjectId === 'vision-studio' ? 'text-white font-semibold' : 'text-dim hover:text-ash',
+            )}
+          >
+            {activeProjectId === 'vision-studio' && (
+              <motion.div
+                layoutId="activeProjectCapsule"
+                className="absolute inset-0 rounded-full bg-purple-500/20 border border-purple-500/40 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.15)]"
+                transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />
+              02 / Vision Studio
+            </span>
+          </button>
+        </div>
+      </div>
+
       {/* Interactive Folders Showcase */}
       <div className="mt-14 grid grid-cols-1 items-center justify-items-center gap-10 md:grid-cols-2 lg:gap-14">
         {/* Project 1: Vision Flow */}
@@ -315,11 +362,11 @@ export function Projects() {
       <AnimatePresence mode="wait">
         <motion.div
           key={activeProject.id}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className="mt-12 rounded-2xl border border-line bg-graphite/90 p-6 md:p-10 shadow-2xl backdrop-blur-md"
+          exit={{ opacity: 0, y: -16 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 25 }}
+          className="mt-12 rounded-2xl border border-white/[0.08] bg-[#121214]/90 p-6 md:p-10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_20px_50px_-10px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
         >
           {/* Header Row */}
           <div className="flex flex-col gap-4 border-b border-line/60 pb-8 md:flex-row md:items-start md:justify-between">
@@ -334,37 +381,43 @@ export function Projects() {
                   </span>
                 )}
               </div>
-              <h3 className="mt-2 font-geist text-3xl font-bold tracking-tight text-ash md:text-4xl">
+              <h3 className="mt-2 font-geist text-3xl font-extrabold tracking-[-0.03em] text-ash md:text-4xl">
                 {activeProject.title}
               </h3>
               <p className="mt-1 font-mono text-xs uppercase tracking-widest text-dim md:text-sm">
                 {activeProject.subtitle}
               </p>
-              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-dim md:text-base">
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed tracking-[-0.005em] text-dim md:text-base">
                 {activeProject.tagline}
               </p>
             </div>
 
-            {/* Quick Action Buttons */}
+            {/* Quick Action Buttons with Instant Tactile Feedback */}
             <div className="flex flex-wrap items-center gap-3 md:shrink-0">
-              <a
+              <motion.a
                 href="https://www.linkedin.com/in/adityarasal007"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-signal/40 bg-signal/10 px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-signal transition-all hover:bg-signal hover:text-black hover:shadow-lg"
+                whileHover={{ y: -1.5, scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                className="inline-flex items-center gap-2 rounded-xl border border-signal/40 bg-signal/15 px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-signal shadow-[0_2px_12px_rgba(255,178,36,0.15)] transition-colors hover:bg-signal hover:text-black cursor-pointer"
               >
                 <FaLinkedinIn className="h-4 w-4" />
                 Request Demo
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href={`mailto:adityadrasal007@gmail.com?subject=${encodeURIComponent(
                   activeProject.emailSubject,
                 )}`}
-                className="inline-flex items-center gap-2 rounded-xl border border-line bg-panel px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-ash transition-all hover:border-signal/40 hover:text-signal"
+                whileHover={{ y: -1.5, scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-ash shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] transition-colors hover:border-signal/40 hover:text-signal cursor-pointer"
               >
                 <Mail className="h-4 w-4" />
                 Email Inquiry
-              </a>
+              </motion.a>
             </div>
           </div>
 

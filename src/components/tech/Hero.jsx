@@ -132,21 +132,37 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Recruiter HUD & Availability Pill Row */}
+        {/* Recruiter HUD & Availability Pill Row — Apple Glass Materials */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 font-mono text-[11px] uppercase tracking-wider text-emerald-400">
+          <motion.span
+            whileHover={{ y: -1.5 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-emerald-400 shadow-[0_2px_12px_rgba(16,185,129,0.12)] backdrop-blur-md"
+          >
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             Open for 2026/2027 AI Co-Ops & Roles
-          </span>
-          <span className="rounded-full border border-line bg-graphite/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-dim">
-            Focus: <span className="text-ash">Edge Computer Vision</span>
-          </span>
-          <span className="rounded-full border border-line bg-graphite/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-dim">
-            Scale: <span className="text-ash">150+ Workforce</span>
-          </span>
-          <span className="rounded-full border border-line bg-graphite/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-dim">
-            Location: <span className="text-ash">Pune · Relocation Ready</span>
-          </span>
+          </motion.span>
+          <motion.span
+            whileHover={{ y: -1.5 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="rounded-full border border-white/[0.08] bg-[#121214]/80 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-dim backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
+          >
+            Focus: <span className="text-ash font-medium">Edge Computer Vision</span>
+          </motion.span>
+          <motion.span
+            whileHover={{ y: -1.5 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="rounded-full border border-white/[0.08] bg-[#121214]/80 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-dim backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
+          >
+            Scale: <span className="text-ash font-medium">150+ Workforce</span>
+          </motion.span>
+          <motion.span
+            whileHover={{ y: -1.5 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="rounded-full border border-white/[0.08] bg-[#121214]/80 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-wider text-dim backdrop-blur-md shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
+          >
+            Location: <span className="text-ash font-medium">Pune · Relocation Ready</span>
+          </motion.span>
         </div>
 
         {/* Center mono statement — tagline */}
@@ -171,12 +187,17 @@ export function Hero() {
         </div>
 
         <div className="flex justify-center pt-8">
-          <a
+          <motion.a
             href="#contact"
-            className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md bg-ash px-8 text-sm font-medium text-[#0a0a0a] transition-colors hover:bg-white"
+            whileHover={{ scale: 1.025 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className="relative inline-flex h-11 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-ash px-8 text-sm font-semibold text-[#0a0a0a] shadow-[0_4px_20px_rgba(255,255,255,0.15)] transition-colors hover:bg-white cursor-pointer select-none"
           >
+            {/* Top specular reflection */}
+            <span className="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
             Let&apos;s Connect
-          </a>
+          </motion.a>
         </div>
       </div>
 
