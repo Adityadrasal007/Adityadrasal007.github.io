@@ -84,13 +84,13 @@ export function Hero() {
           className="relative"
           style={reduced ? undefined : { y: headlineY, opacity: headlineOpacity }}
         >
-          <p className="absolute -top-4 left-20 font-mono text-sm font-medium tracking-wider text-signal">
+          <p className="absolute -top-4 left-4 font-mono text-xs font-medium tracking-wider text-signal sm:left-20 sm:text-sm">
             AI BUILDER
           </p>
-          <h1 className="relative z-20 text-center font-geist text-7xl font-bold tracking-[-7px] text-ash md:text-9xl md:tracking-[-14px] xl:text-[10rem] xl:tracking-[-1rem]">
+          <h1 className="relative z-20 text-center font-geist text-5xl font-bold tracking-tight text-ash sm:text-7xl sm:tracking-[-7px] md:text-9xl md:tracking-[-14px] xl:text-[10rem] xl:tracking-[-1rem]">
             <TextScramble text="ADITYA RASAL" rescrambleOnHover />
           </h1>
-          <p className="mt-5 pr-1 text-right text-lg font-thin uppercase tracking-[4px] text-dim sm:text-2xl sm:tracking-[6px] md:text-3xl">
+          <p className="mt-3 pr-1 text-right text-sm font-thin uppercase tracking-[2px] text-dim sm:mt-5 sm:text-2xl sm:tracking-[6px] md:text-3xl">
             Computer Science Engineer
           </p>
         </motion.div>
