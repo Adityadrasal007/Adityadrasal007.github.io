@@ -1,10 +1,9 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
-import { ArrowDownRight } from 'lucide-react';
 import { TextScramble } from '../ui/TextScramble';
 import { TextRotate } from '../ui/TextRotate';
 import { useMouseDrift } from '../../hooks/useMouseDrift';
-import { profile, heroRoles, certifications } from '../../data/techData';
+import { profile, heroRoles } from '../../data/techData';
 
 /*
  * Hero — structure copied 1:1 from tech_component/hero.txt
@@ -76,7 +75,6 @@ export function Hero() {
   const headlineOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.15]);
   const gridY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
-  const stackedCerts = certifications.slice(0, 3);
 
   return (
     <section ref={sectionRef} id="top" className="relative min-h-screen overflow-hidden py-20">
@@ -151,71 +149,34 @@ export function Hero() {
           </span>
         </div>
 
-        {/* Center mono statement — tagline from tech.txt */}
-        <div className="mt-10 md:mt-24">
-          <p className="mx-auto max-w-2xl text-center font-mono text-sm font-medium uppercase tracking-wide text-dim md:text-base">
-            I AM A{' '}
+        {/* Center mono statement — tagline */}
+        <div className="mt-10 flex flex-col items-center justify-center text-center font-mono text-sm font-medium uppercase tracking-wider text-dim md:mt-20 md:text-base">
+          <motion.div
+            layout
+            transition={{ layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+            className="inline-flex h-8 items-center justify-center gap-2 whitespace-nowrap"
+          >
+            <span className="text-dim">I AM A</span>
             <TextRotate
               words={heroRoles.map((role) => role.toUpperCase())}
-              className="text-signal"
+              className="font-bold text-signal"
             />
-            <br />
+          </motion.div>
+          <p className="mt-2 tracking-wider text-dim">
             ARCHITECTING SCALABLE VISION MODELS
-            <br />
+          </p>
+          <p className="mt-1 tracking-wider text-dim">
             AND ENGINEERING UNFORGETTABLE EVENTS
           </p>
         </div>
-        <div className="flex justify-center pt-6">
+
+        <div className="flex justify-center pt-8">
           <a
             href="#contact"
             className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md bg-ash px-8 text-sm font-medium text-[#0a0a0a] transition-colors hover:bg-white"
           >
             Let&apos;s Connect
           </a>
-        </div>
-
-        {/* Bottom row — stacked cards + recent work pointer */}
-        <div className="mt-20 items-end justify-between md:flex">
-          <div className="relative">
-            <div className="mb-8 h-36 w-60 overflow-hidden rounded-md border border-line shadow-lg md:mb-0">
-              <img
-                src={stackedCerts[0].image}
-                alt={stackedCerts[0].title}
-                loading="lazy"
-                className="h-full w-full bg-panel object-cover"
-              />
-            </div>
-            <div className="absolute -top-6 left-6 mb-8 h-36 w-60 overflow-hidden rounded-md border border-line shadow-lg md:mb-0">
-              <img
-                src={stackedCerts[1].image}
-                alt={stackedCerts[1].title}
-                loading="lazy"
-                className="h-full w-full bg-panel object-cover"
-              />
-            </div>
-            <div className="absolute -top-12 left-12 mb-8 h-36 w-60 overflow-hidden rounded-md border border-line shadow-lg md:mb-0">
-              <img
-                src={stackedCerts[2].image}
-                alt={stackedCerts[2].title}
-                loading="lazy"
-                className="h-full w-full bg-panel object-cover"
-              />
-            </div>
-          </div>
-          <div>
-            <a
-              href="#certifications"
-              className="flex items-center gap-2 transition-colors hover:text-signal md:justify-end"
-            >
-              <span className="text-lg font-medium tracking-wider text-ash">RECENT WORK</span>
-              <ArrowDownRight className="size-6 text-signal" aria-hidden="true" />
-            </a>
-            <div className="mt-3 md:text-right">
-              <h2 className="font-geist text-5xl uppercase tracking-[-4px] text-ash">
-                Engineering without Limits
-              </h2>
-            </div>
-          </div>
         </div>
       </div>
 
