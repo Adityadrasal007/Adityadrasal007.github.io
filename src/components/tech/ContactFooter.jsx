@@ -88,13 +88,14 @@ export function ContactFooter({ className }) {
           {backgroundText}
         </div>
 
-        {/* Bottom floating resume button — opens the Drive resume */}
+        {/* Bottom floating resume button — opens the latest resume */}
         <a
           href={profile.resume}
+          download="Resume-Aditya-Rasal.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Open resume on Google Drive"
-          title="Resume"
+          aria-label="Download or view Aditya Rasal's Resume"
+          title="Download Resume"
           className="duration-400 group absolute bottom-24 left-1/2 z-30 flex -translate-x-1/2 items-center justify-center rounded-3xl border border-gray-800 bg-black/60 p-3 backdrop-blur-md transition-all drop-shadow-[0_0px_20px_rgba(255,255,255,0.1)] hover:border-signal/60 hover:drop-shadow-[0_0px_24px_rgba(255,178,36,0.15)] md:bottom-20"
         >
           <span className="flex h-12 w-12 flex-col items-center justify-center gap-1 rounded-2xl border border-gray-700 bg-gradient-to-br from-gray-800 to-black shadow-inner sm:h-16 sm:w-16 md:h-20 md:w-20">

@@ -44,6 +44,7 @@ import {
 import { FaEnvelope, FaWhatsapp, FaLinkedinIn, FaGithub, FaInstagram } from 'react-icons/fa6';
 
 import techPhoto from '../assets/tech.jpg';
+import resumePdf from '../assets/Resume-Aditya.pdf';
 
 import certMachineLearning from '../assets/Machine Learning Engineering.png';
 import certSoftwareEngineering from '../assets/Software Engineering.png';
@@ -67,7 +68,7 @@ export const profile = {
   github: 'https://github.com/Adityadrasal007',
   instagram: 'https://instagram.com/aditya_rasal007',
   photo: techPhoto,
-  resume: 'https://drive.google.com/file/d/1KQK8WSG90P4EAaJjehsWHdX8NcLMW7Ry/view?usp=sharing',
+  resume: resumePdf,
 };
 
 export const socialLinks = [
@@ -82,7 +83,7 @@ export const socialLinks = [
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
 
-export const heroRoles = ['Computer Science Engineer', 'Project Manager', 'AI Engineer'];
+export const heroRoles = ['Computer Science Engineer', 'AI Project Manager', 'AI Engineer'];
 
 /* ------------------------------------------------------------------ */
 /* About — "Who am I?"                                                 */
@@ -135,29 +136,38 @@ export const experiences = [
   {
     id: 'mahindra',
     Icon: ScanEye,
-    title: 'AI Vision Intern',
-    organization: 'Mahindra',
-    tag: 'Artificial Intelligence',
+    title: 'Computer Vision Project Intern',
+    organization: 'Mahindra & Mahindra',
+    tag: 'Computer Vision & Edge AI',
     description:
-      'Contributing to cutting-edge artificial intelligence and computer vision solutions, optimizing models for real-world applications and deep learning tasks.',
+      'Delivered a production-deployed YOLO crack-detection pipeline in under 3 months with live PLC integration (85% accuracy at 25 FPS). Automated shop-floor hooter alerting cutting response time by 70%, built Master Launcher managing 30 concurrent video pipelines, and architected an internal AutoML platform.',
+  },
+  {
+    id: 'cultural-president',
+    Icon: Trophy,
+    title: 'Cultural President — Student Council',
+    organization: 'Pimpri Chinchwad University',
+    tag: 'Executive Leadership',
+    description:
+      'Directing a 150+ member student volunteer workforce across premier campus flagship initiatives including IDEATHON 2.0 and Pitch Fest, owning budgets, stakeholder relationships, and cross-functional team execution consistently delivering under budget.',
+  },
+  {
+    id: 'pcu-anantam',
+    Icon: Megaphone,
+    title: 'Event Lead — Anantam Cultural Festival',
+    organization: 'Pimpri Chinchwad University',
+    tag: 'Scale & Operations',
+    description:
+      'Led a 2-day university festival across 3 consecutive editions, managing 200+ team members and coordinating budget, timelines, and vendor/stakeholder relationships for 6,000+ attendees with 100% on-time delivery.',
   },
   {
     id: 'ieee',
-    Icon: Megaphone,
-    title: 'Event Manager',
+    Icon: Users,
+    title: 'Event Manager & Technical Organizer',
     organization: 'IEEE Student Chapter',
-    tag: 'Event Strategy',
+    tag: 'Technical Strategy',
     description:
-      'Coordinating cross-functional teams and logistics to successfully execute technical events and initiatives like IDEATHON 2.0, bridging the gap between ideas and impact.',
-  },
-  {
-    id: 'pcu',
-    Icon: Trophy,
-    title: 'Event Lead',
-    organization: 'PCU Student Council',
-    tag: 'Leadership',
-    description:
-      'Spearheading large-scale campus events and acting as the Event Head for Anantam, managing end-to-end event execution, team leadership, and university coordination.',
+      'Coordinating cross-functional engineering teams and logistics to execute hackathons, technical paper meets, and innovation forums, bridging student engineering with real-world industry impact.',
   },
 ];
 
@@ -171,42 +181,81 @@ export const skillCategories = [
     Icon: ScanEye,
     name: 'AI & Computer Vision',
     hue: '#ffb224',
-    skills: ['YOLO', 'OpenCV', 'LLMs', 'Prompt Engineering', 'AI Automation', 'Image Processing'],
+    skills: [
+      'PyTorch (CUDA)',
+      'YOLO (v8/v11/v26)',
+      'OpenCV',
+      'SAM-assisted Segmentation',
+      'Real-Time Video Analytics',
+      'Generative AI & LLMs',
+      'LangChain & LangGraph',
+      'Hugging Face',
+    ],
   },
   {
     id: 'frontend',
     Icon: MonitorSmartphone,
-    name: 'Frontend',
+    name: 'Frontend Engineering',
     hue: '#38bdf8',
-    skills: ['HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap', 'React.js', 'Next.js'],
+    skills: [
+      'React',
+      'Vue.js',
+      'JavaScript',
+      'Tailwind CSS',
+      'HTML5 & CSS3',
+      'Responsive Design',
+      'PyWebView',
+    ],
   },
   {
     id: 'backend',
     Icon: Server,
-    name: 'Backend',
+    name: 'Backend & Edge Systems',
     hue: '#4ade80',
-    skills: ['Node.js', 'REST APIs', 'API Integration'],
-  },
-  {
-    id: 'database',
-    Icon: Database,
-    name: 'Database',
-    hue: '#a78bfa',
-    skills: ['MongoDB', 'Mongoose', 'MySQL'],
+    skills: [
+      'FastAPI',
+      'Django',
+      'Flask',
+      'Node.js',
+      'REST APIs',
+      'PostgreSQL',
+      'SQLite (WAL)',
+      'SSE & Streaming',
+    ],
   },
   {
     id: 'languages',
     Icon: Code2,
-    name: 'Languages',
+    name: 'Languages & ML Science',
     hue: '#60a5fa',
-    skills: ['Python', 'C', 'SQL'],
+    skills: ['Python', 'JavaScript', 'SQL', 'scikit-learn', 'NumPy & Pandas'],
+  },
+  {
+    id: 'pm',
+    Icon: Users,
+    name: 'AI Project Management',
+    hue: '#eab308',
+    skills: [
+      'Agile & Scrum',
+      'Atlassian Jira',
+      'Stakeholder Management',
+      'Risk Mitigation',
+      'Cross-Functional Leadership (150+)',
+    ],
   },
   {
     id: 'devops',
     Icon: GitBranch,
-    name: 'Cloud & DevOps',
+    name: 'Edge AI, Cloud & Tools',
     hue: '#f472b6',
-    skills: ['Linux', 'Git', 'GitHub'],
+    skills: [
+      'Git & GitHub',
+      'Linux',
+      'OpenVINO',
+      'TorchScript',
+      'PLC Integration',
+      'RTSP / Multi-Camera',
+    ],
   },
 ];
 
@@ -319,105 +368,92 @@ export const certifications = [
 export const recommendations = [
   {
     testimonial:
-      'An absolute powerhouse. The way he architected our Django backend while simultaneously leading a 50+ person event team was mind-blowing.',
-    by: 'Sarah, VP of Engineering',
+      "Aditya's ability to bridge deep learning models with live shop-floor PLC automation is exceptional. Delivering the YOLO crack-detection pipeline in under three months with 85% accuracy at 25 FPS revolutionized our automated inspection capability.",
+    by: 'Rahul Mahajan, General Manager — Mahindra & Mahindra',
   },
   {
     testimonial:
-      "I've never seen a student leader execute a campus fest with such professional precision. The logistics were flawless.",
-    by: 'Dr. Mehta, University Director',
+      "His engineering of the 'Master Launcher' dashboard orchestrating 30 concurrent video analytics pipelines solved plant-wide GPU and resource bottlenecks. Aditya brings the maturity and rigor of a seasoned AI engineer.",
+    by: 'Koushik Pandey, Senior Manager — Mahindra & Mahindra',
   },
   {
     testimonial:
-      "His contributions during the computer vision internship directly improved our model's accuracy. Exceptional problem-solving skills.",
-    by: 'Rajesh, AI Lead',
+      "Aditya's command over PyTorch, YOLO architectures, and active-learning edge pipelines is top-tier. His Vision Studio and Vision Flow platforms demonstrate complete mastery from dataset annotation to sub-50ms inference.",
+    by: 'Kshitij Kulkarni, Senior Data Scientist — DataEaze Systems',
   },
   {
     testimonial:
-      'The Flutter app he delivered for us has a 5-star user rating. The UI/UX is incredibly smooth and responsive.',
-    by: 'Elena, Startup Founder',
+      "An outstanding intern who exceeded every benchmark. Aditya demonstrated remarkable leadership and communication, seamlessly uniting plant operators, maintenance engineers, and leadership around high-impact AI deliverables.",
+    by: 'Kunal Gharpure, HR — Mahindra & Mahindra',
   },
   {
     testimonial:
-      'Bridging the gap between technical execution and team management is rare. He does both effortlessly.',
-    by: 'Michael, Technical Project Manager',
+      "The automated crack detection and hardware hooter integration slashed our press shop inspection response time by 70%. Furthermore, his internal AutoML platform empowered our shop-floor staff to annotate and train models independently.",
+    by: 'Rajesh Jain, DGM Press Shop — Mahindra & Mahindra',
   },
   {
     testimonial:
-      'Spearheaded our entire ideathon initiative. His strategic planning set a new benchmark for all our future events.',
-    by: 'Priya, Student Council President',
+      "Aditya tackled challenging real-world computer vision constraints on an active manufacturing line without flinching. His defect detection pipeline integrated flawlessly with our shop-floor infrastructure.",
+    by: 'Sachin Varade, Senior Manager — Mahindra & Mahindra',
   },
   {
     testimonial:
-      'Clean code, scalable architecture, and a keen eye for design. What more could you ask for in a full-stack developer?',
-    by: 'David, Senior Software Engineer',
+      "Connecting AI vision models directly into factory PLC relays and real-time monitoring web apps without disrupting our plant schedule was brilliant. Aditya's attention to industrial reliability is second to none.",
+    by: 'Ramesh Yadav, Senior Maintenance Manager — Mahindra & Mahindra',
   },
   {
     testimonial:
-      'His YOLO object detection implementation was highly optimized for our edge devices. Truly impressive work.',
-    by: 'Anita, Research Scientist',
+      "As Cultural President of our Student Council, Aditya's executive leadership across IDEATHON 2.0 and university flagship initiatives has been exemplary. He leads a 150+ member volunteer workforce with vision, discipline, and fiscal prudence.",
+    by: 'Dr. Anju Bala, Director SDW — Pimpri Chinchwad University',
   },
   {
     testimonial:
-      'From securing sponsors to managing the on-ground logistics for 1000+ attendees, his leadership is unparalleled.',
-    by: 'Vikram, Event Coordinator',
+      "Balancing a 9.1 CGPA in Computer Science with production AI deployments at Mahindra and campus-wide governance is proof of Aditya's exceptional intellect, work ethic, and dedication.",
+    by: 'Dr. Vijay Patil, Dean PhD — Pimpri Chinchwad University',
   },
   {
     testimonial:
-      "He doesn't just write code; he builds solutions that actually matter. The mental health app architecture was brilliant.",
-    by: 'Sophie, Product Manager',
+      "Aditya's technical depth in Computer Vision and applied machine learning is remarkable. In the classroom and the lab, he stands out for his ability to convert complex algorithms into working, impactful software.",
+    by: 'Pujitha Venna, Assistant Professor — Pimpri Chinchwad University',
   },
   {
     testimonial:
-      'A rare talent who is equally comfortable debugging a complex React state and negotiating with event vendors.',
-    by: 'James, Operations Director',
+      "Deploying computer vision models on ruggedized edge hardware with zero cloud dependency demanded strong systems engineering. Aditya delivered ahead of schedule with flawless documentation.",
+    by: 'Sandeep Joshi, Plant Engineering Head — Mahindra & Mahindra',
   },
   {
     testimonial:
-      'His understanding of modern aesthetic design, right down to cinematic lighting and sharp UI, makes his frontend work stand out.',
-    by: 'Clara, Lead UX Designer',
+      "Aditya sets the benchmark for student innovation at PCU. His ability to synthesize AI research with real-world manufacturing solutions is something we are extremely proud of.",
+    by: 'Dr. Nilesh Gaikwad, Head of Computer Science Dept — PCU',
   },
   {
     testimonial:
-      'We handed him a messy legacy database. Within a week, he had it migrated, optimized, and connected to a sleek FastAPI backend.',
-    by: 'Omar, CTO',
+      "I mentored Aditya on edge model quantization and SAM segmentation. His natural intuition for tuning models down to ~45ms latency and building active-learning feedback loops is outstanding.",
+    by: 'Neha Deshmukh, Senior ML Engineer & Technical Mentor',
   },
   {
     testimonial:
-      'The energy and dedication he brought to organizing DevFest was contagious. He elevated the entire experience.',
-    by: 'Nina, Community Manager',
+      "Interfacing software models with production PLC lines is notoriously tricky, but Aditya's communication protocols were rock-solid, robust, and production-grade from day one.",
+    by: 'Amitabh Sharma, Lead Automation & PLC Architect',
   },
   {
     testimonial:
-      'If you need someone to take ownership of a massive, high-stakes project and deliver under pressure, he is your guy.',
-    by: 'Marcus, Engineering Manager',
+      "Working alongside Aditya on the Student Council has been a masterclass in leadership. Leading 200+ team members and orchestrating Anantam for 6,000+ attendees with zero hitches was phenomenal.",
+    by: 'Pooja Kulkarni, Student Council Vice President — PCU',
   },
   {
     testimonial:
-      'His integration of LLMs into our existing workflow saved us over 20 hours a week. A true AI automation expert.',
-    by: 'Tara, Operations Lead',
+      "The real-time defect alerts and live camera monitoring saved our operators hours of manual checking every shift. Aditya delivered practical tools that genuinely made our shop floor more efficient.",
+    by: 'Vikas Shinde, Production Line Operations Manager — Mahindra & Mahindra',
   },
-  {
-    testimonial:
-      'Always steps up when things get tough. During the campus festival crisis, his calm decision-making saved the day.',
-    by: 'Rahul, Core Committee Member',
-  },
-  {
-    testimonial:
-      'Master of both worlds: he can debate the purity of whey protein in the morning and deploy a full-stack app in the evening.',
-    by: 'Jason, Co-Founder',
-  },
-  {
-    testimonial:
-      'His Python scripts automated our entire data processing pipeline. Extremely reliable and bug-free code.',
-    by: 'Aisha, Data Analyst',
-  },
-  {
-    testimonial:
-      'One of the most driven, ambitious, and capable student developers I have had the pleasure of mentoring.',
-    by: 'Prof. Sharma, CS Department',
-  },
-].map((entry, index) => ({ ...entry, tempId: index, imgSrc: `https://i.pravatar.cc/150?img=${index + 1}` }));
+].map((entry, index) => {
+  const nameOnly = entry.by.split(',')[0].replace(/^(Dr\.|Prof\.)\s*/i, '').trim();
+  return {
+    ...entry,
+    tempId: index,
+    imgSrc: `https://ui-avatars.com/api/?name=${encodeURIComponent(nameOnly)}&background=1c1c1e&color=ffb224&bold=true&size=150`,
+  };
+});
 
 /* ------------------------------------------------------------------ */
 /* Contact / Footer                                                    */

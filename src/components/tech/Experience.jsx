@@ -64,7 +64,7 @@ export function Experience() {
 
   const containerStyles = {
     stack: 'relative h-88 w-80 sm:w-104 md:w-136',
-    grid: 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl',
+    grid: 'grid grid-cols-1 gap-5 sm:grid-cols-2 max-w-5xl',
     list: 'flex flex-col gap-4 max-w-4xl',
   };
 

@@ -25,7 +25,7 @@ const SPANS = {
   frontend: 'lg:col-span-5',
   backend: 'lg:col-span-5',
   languages: 'lg:col-span-4',
-  database: 'lg:col-span-4',
+  pm: 'lg:col-span-4',
   devops: 'lg:col-span-4',
 };
 
@@ -123,26 +123,30 @@ function CategoryCard({ category, featured = false }) {
 export function Skills() {
   const sectionRef = useRef(null);
 
-  // Scroll-scrubbed rise: each card tracks the scrollbar 1:1 while entering
+  // Scroll-scrubbed reveal: coordinated across the whole grid so all blocks
+  // (including the bottom 3) reach full visibility and 0 tilt by mid-scroll
   useGsapScene(sectionRef, () => {
-    gsap.utils.toArray('[data-skill-card]').forEach((card) => {
-      gsap.fromTo(
-        card,
-        { y: 90, opacity: 0, rotateX: 9, transformPerspective: 900 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 96%',
-            end: 'top 58%',
-            scrub: true,
-          },
+    const cards = gsap.utils.toArray('[data-skill-card]');
+    gsap.fromTo(
+      cards,
+      { y: 60, opacity: 0, rotateX: 7, transformPerspective: 900 },
+      {
+        y: 0,
+        opacity: 1,
+        rotateX: 0,
+        stagger: {
+          each: 0.05,
+          from: 'start',
         },
-      );
-    });
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          end: 'top 28%',
+          scrub: 0.6,
+        },
+      },
+    );
   });
 
   return (

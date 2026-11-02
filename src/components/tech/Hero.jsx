@@ -104,7 +104,7 @@ export function Hero() {
             <div className="flex h-fit w-full max-w-xl items-end justify-between gap-6 bg-panel p-8 md:max-w-2xl md:p-10 lg:max-w-3xl">
               <div className="whitespace-nowrap text-[clamp(0.875rem,4.2vw,1.125rem)] font-semibold leading-relaxed text-ash">
                 <div>/ COMPUTER SCIENCE ENGINEER</div>
-                <div>/ PROJECT MANAGER</div>
+                <div>/ AI PROJECT MANAGER</div>
                 <div>/ AI ENGINEER</div>
               </div>
               <div

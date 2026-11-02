@@ -60,7 +60,7 @@ function TestimonialCard({ position, testimonial, handleMove, cardSize }) {
 
       <h3
         className={cn(
-          'text-base font-medium leading-relaxed tracking-tight sm:text-xl',
+          'text-xs sm:text-sm leading-relaxed tracking-tight font-medium line-clamp-6',
           isCenter ? 'text-gray-900' : 'text-gray-200',
         )}
       >
@@ -69,8 +69,8 @@ function TestimonialCard({ position, testimonial, handleMove, cardSize }) {
 
       <p
         className={cn(
-          'absolute bottom-8 left-8 right-8 mt-4 text-sm font-medium',
-          isCenter ? 'text-gray-600' : 'text-gray-400',
+          'absolute bottom-6 left-8 right-8 text-xs sm:text-xs font-semibold tracking-wide',
+          isCenter ? 'text-gray-700' : 'text-signal/90',
         )}
       >
         — {testimonial.by}
