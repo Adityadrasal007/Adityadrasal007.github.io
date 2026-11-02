@@ -15,9 +15,8 @@ import { cn } from '../../lib/utils';
  * real Coursera credentials from tech.txt.
  */
 
-const CELL_W = 360;
-const CELL_H = 250;
-const STEP = 3 * (CELL_H + 12);
+const DEFAULT_CELL_W = 490;
+const DEFAULT_CELL_H = 345;
 
 const EXIT_MS = 240;
 const SLIDE_MS = 800;
@@ -29,34 +28,34 @@ const ISSUER_CLASSES =
   'm-0 text-sm font-medium leading-[1.3] text-blue-400 hover:text-blue-300 transition-colors inline-flex items-center gap-1 cursor-pointer';
 
 const FEATURED_SHADOW =
-  '0 10px 30px -10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)';
+  '0 12px 36px -10px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.12)';
 
 /* Background placeholder cells */
-function Cell() {
+function Cell({ cellW = DEFAULT_CELL_W, cellH = DEFAULT_CELL_H }) {
   return (
     <div
       aria-hidden="true"
       className="shrink-0 rounded-xl border border-gray-800/50 bg-gradient-to-b from-gray-900/40 to-black blur-[3px]"
-      style={{ width: CELL_W, height: CELL_H }}
+      style={{ width: cellW, height: cellH }}
     />
   );
 }
 
 /* Featured certificate — fully visible, floating, with a light sheen */
-function Featured({ src, alt, onOpen }) {
+function Featured({ src, alt, onOpen, cellW = DEFAULT_CELL_W, cellH = DEFAULT_CELL_H }) {
   return (
     <motion.div
       animate={{ y: [0, -8, 0] }}
       transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       onClick={onOpen}
-      className="group relative shrink-0 cursor-zoom-in overflow-hidden rounded-xl bg-[#050505] ring-1 ring-gray-700/50"
-      style={{ width: CELL_W, height: CELL_H, boxShadow: FEATURED_SHADOW }}
+      className="group relative shrink-0 cursor-zoom-in overflow-hidden rounded-xl bg-[#050505] ring-1 ring-gray-700/50 shadow-2xl transition-all"
+      style={{ width: cellW, height: cellH, boxShadow: FEATURED_SHADOW }}
     >
       <img
         src={src}
         alt={alt ?? 'Certification'}
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-contain p-1.5"
+        className="absolute inset-0 h-full w-full object-contain p-2"
       />
       {/* Animated light sheen over the certificate */}
       <motion.div
@@ -195,9 +194,30 @@ export function ScrollReelCertifications({ certifications = certData, charStagge
     return items;
   }, [certifications, count]);
 
+  const [windowWidth, setWindowWidth] = React.useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200,
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 640;
+  const isTablet = windowWidth >= 640 && windowWidth < 1024;
+
+  const cellW = isMobile
+    ? Math.max(280, Math.min(windowWidth - 48, 380))
+    : isTablet
+      ? 430
+      : DEFAULT_CELL_W;
+  const cellH = isMobile ? Math.round(cellW * 0.7) : isTablet ? 300 : DEFAULT_CELL_H;
+  const step = 3 * (cellH + 12);
+
   const sideCellCount = 4 + 2 * count;
   const centerIdx = (count - 1) / 2;
-  const middleY = (centerIdx - index) * STEP;
+  const middleY = (centerIdx - index) * step;
   const sideY = -middleY;
 
   const colStyle = (y) => ({
@@ -215,14 +235,14 @@ export function ScrollReelCertifications({ certifications = certData, charStagge
       tabIndex={0}
       onKeyDown={onKeyDown}
       className={cn(
-        'relative flex w-full max-w-[1200px] flex-col items-stretch gap-4 overflow-hidden rounded-2xl border border-gray-800 bg-[#0A0A0A] outline-none focus-visible:ring-2 focus-visible:ring-gray-600 md:min-h-[440px] md:flex-row',
+        'relative flex w-full max-w-[1280px] flex-col items-stretch gap-4 overflow-hidden rounded-2xl border border-line bg-[#0A0A0A] outline-none focus-visible:ring-2 focus-visible:ring-gray-600 md:min-h-[480px] lg:min-h-[520px] md:flex-row',
         className,
       )}
     >
       {/* Reel section */}
       <div
         aria-hidden="true"
-        className="relative h-80 w-full shrink-0 self-stretch overflow-hidden md:h-auto md:w-[600px]"
+        className="relative h-[360px] w-full shrink-0 self-stretch overflow-hidden md:h-auto md:w-[620px] lg:w-[720px]"
         style={{
           WebkitMaskImage:
             'linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
@@ -239,7 +259,7 @@ export function ScrollReelCertifications({ certifications = certData, charStagge
             style={colStyle(sideY)}
           >
             {Array.from({ length: sideCellCount }).map((_, i) => (
-              <Cell key={`l-${i}`} />
+              <Cell key={`l-${i}`} cellW={cellW} cellH={cellH} />
             ))}
           </div>
 
@@ -255,9 +275,11 @@ export function ScrollReelCertifications({ certifications = certData, charStagge
                   src={certifications[item.i].image}
                   alt={certifications[item.i].title}
                   onOpen={() => setLightboxOpen(true)}
+                  cellW={cellW}
+                  cellH={cellH}
                 />
               ) : (
-                <Cell key={`mc-${i}`} />
+                <Cell key={`mc-${i}`} cellW={cellW} cellH={cellH} />
               ),
             )}
           </div>
@@ -268,7 +290,7 @@ export function ScrollReelCertifications({ certifications = certData, charStagge
             style={colStyle(sideY)}
           >
             {Array.from({ length: sideCellCount }).map((_, i) => (
-              <Cell key={`r-${i}`} />
+              <Cell key={`r-${i}`} cellW={cellW} cellH={cellH} />
             ))}
           </div>
         </div>
