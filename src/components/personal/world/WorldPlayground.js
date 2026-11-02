@@ -267,3 +267,4 @@ export function createWorldPlayground(scene, dynamicObstacles) {
     update,
   };
 }
+

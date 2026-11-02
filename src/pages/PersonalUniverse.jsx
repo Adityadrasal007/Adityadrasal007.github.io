@@ -3,14 +3,17 @@ import * as THREE from 'three';
 import { createVehiclePhysics } from '../components/personal/vehicle/VehiclePhysics';
 import { createVehicleRenderer } from '../components/personal/vehicle/VehicleRenderer';
 import { createWorldPlayground, PLAYGROUND_ZONES } from '../components/personal/world/WorldPlayground';
+import { createWorldProps } from '../components/personal/world/WorldProps';
+import { createSkidMarks } from '../components/personal/vehicle/SkidMarks';
+import sound from '../components/personal/audio/SoundEngine';
 import DrivingHUD from '../components/personal/vehicle/DrivingHUD';
 
 export function PersonalUniverse() {
   const mountRef = useRef(null);
   const [speed, setSpeed] = useState(0);
   const [activeZone, setActiveZone] = useState(null);
+  const [cameraMode, setCameraMode] = useState('isometric'); // 'isometric' | 'chase'
 
-  // References for controls & cleanup
   const controlsRef = useRef({
     forward: false,
     backward: false,
@@ -20,6 +23,11 @@ export function PersonalUniverse() {
   });
 
   const resetCarRef = useRef(null);
+  const cameraModeRef = useRef('isometric');
+
+  useEffect(() => {
+    cameraModeRef.current = cameraMode;
+  }, [cameraMode]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -51,8 +59,18 @@ export function PersonalUniverse() {
     const physics = createVehiclePhysics();
     const vehicleVisuals = createVehicleRenderer(scene);
     const playground = createWorldPlayground(scene, physics.dynamicObstacles);
+    const worldProps = createWorldProps(scene);
+    const skidMarks = createSkidMarks(scene);
 
     resetCarRef.current = physics.resetCar;
+
+    // Collision sound trigger
+    physics.chassisBody.addEventListener('collide', (e) => {
+      const relVel = e.contact.getImpactVelocityAlongNormal();
+      if (Math.abs(relVel) > 2.5) {
+        sound.playImpact(Math.min(3, Math.abs(relVel) / 3));
+      }
+    });
 
     // 3. Keyboard Listeners
     const onKeyDown = (e) => {
@@ -63,6 +81,10 @@ export function PersonalUniverse() {
       if (['d', 'arrowright'].includes(k)) controlsRef.current.right = true;
       if (e.key === ' ') controlsRef.current.brake = true;
       if (k === 'r') physics.resetCar();
+      if (k === 'h') sound.playHorn();
+      if (k === 'c') {
+        setCameraMode((m) => (m === 'isometric' ? 'chase' : 'isometric'));
+      }
     };
 
     const onKeyUp = (e) => {
@@ -89,11 +111,11 @@ export function PersonalUniverse() {
     let lastTime = performance.now();
     let animId = null;
 
-    const maxEngineForce = 480;
-    const maxBrakeForce = 60;
+    const maxEngineForce = 520;
+    const maxBrakeForce = 65;
     const maxSteerAngle = 0.52;
 
-    const cameraOffset = new THREE.Vector3(-14, 18, 14);
+    const isoOffset = new THREE.Vector3(-14, 18, 14);
     const targetPos = new THREE.Vector3();
     const currentCamLook = new THREE.Vector3();
 
@@ -110,8 +132,8 @@ export function PersonalUniverse() {
         vehicle.applyEngineForce(-maxEngineForce, 2);
         vehicle.applyEngineForce(-maxEngineForce, 3);
       } else if (ctrl.backward) {
-        vehicle.applyEngineForce(maxEngineForce * 0.65, 2);
-        vehicle.applyEngineForce(maxEngineForce * 0.65, 3);
+        vehicle.applyEngineForce(maxEngineForce * 0.7, 2);
+        vehicle.applyEngineForce(maxEngineForce * 0.7, 3);
       } else {
         vehicle.applyEngineForce(0, 2);
         vehicle.applyEngineForce(0, 3);
@@ -145,18 +167,6 @@ export function PersonalUniverse() {
       // Step Physics World
       physics.world.step(1 / 60, dt, 3);
 
-      // Sync Visuals
-      vehicleVisuals.update(vehicle, dt);
-      playground.update();
-
-      // Camera Isometric Tracking
-      const carPos = physics.chassisBody.position;
-      targetPos.set(carPos.x + cameraOffset.x, carPos.y + cameraOffset.y, carPos.z + cameraOffset.z);
-      camera.position.lerp(targetPos, 0.08);
-
-      currentCamLook.lerp(new THREE.Vector3(carPos.x, carPos.y + 0.5, carPos.z), 0.1);
-      camera.lookAt(currentCamLook);
-
       // Speed Calculation
       const speedKmH = vehicle.currentVehicleSpeedKmHour
         ? Math.abs(vehicle.currentVehicleSpeedKmHour)
@@ -165,6 +175,50 @@ export function PersonalUniverse() {
             physics.chassisBody.velocity.z ** 2
           ) * 3.6;
       setSpeed(speedKmH);
+
+      // Drift Detection
+      const isDrifting =
+        ctrl.brake ||
+        (speedKmH > 18 && Math.abs(physics.chassisBody.angularVelocity.y) > 0.95);
+
+      // Update Audio Synthesizer
+      sound.updateEngine(speedKmH, ctrl.forward || ctrl.backward);
+      sound.updateSkid(isDrifting);
+
+      // Sync Visuals
+      vehicleVisuals.update(vehicle, dt);
+      playground.update();
+      worldProps.update(dt);
+      skidMarks.update(vehicle, isDrifting);
+
+      // Camera Tracking
+      const carPos = physics.chassisBody.position;
+      const isChase = cameraModeRef.current === 'chase';
+
+      if (isChase) {
+        // Dynamic Behind-Car Chase Cam
+        const forwardVector = new THREE.Vector3(0, 0, -1).applyQuaternion(
+          vehicleVisuals.chassisMesh.quaternion
+        );
+        targetPos
+          .copy(carPos)
+          .sub(forwardVector.clone().multiplyScalar(9.5))
+          .add(new THREE.Vector3(0, 4.5, 0));
+        camera.position.lerp(targetPos, 0.08);
+
+        currentCamLook.lerp(
+          new THREE.Vector3(carPos.x, carPos.y + 1.2, carPos.z).add(
+            forwardVector.multiplyScalar(4)
+          ),
+          0.1
+        );
+      } else {
+        // Classic Bruno Simon Top-Down Isometric Chase Cam
+        targetPos.set(carPos.x + isoOffset.x, carPos.y + isoOffset.y, carPos.z + isoOffset.z);
+        camera.position.lerp(targetPos, 0.08);
+        currentCamLook.lerp(new THREE.Vector3(carPos.x, carPos.y + 0.5, carPos.z), 0.1);
+      }
+      camera.lookAt(currentCamLook);
 
       // Check Active Zone Proximity
       let foundZone = null;
@@ -190,6 +244,7 @@ export function PersonalUniverse() {
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('resize', onResize);
+      sound.setMuted(true);
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -208,7 +263,11 @@ export function PersonalUniverse() {
   }, []);
 
   const handleHonk = useCallback(() => {
-    // Audio horn chirp can be played here
+    sound.playHorn();
+  }, []);
+
+  const handleToggleCamera = useCallback(() => {
+    setCameraMode((m) => (m === 'isometric' ? 'chase' : 'isometric'));
   }, []);
 
   return (
@@ -220,6 +279,8 @@ export function PersonalUniverse() {
       <DrivingHUD
         speed={speed}
         activeZone={activeZone}
+        cameraMode={cameraMode}
+        onToggleCamera={handleToggleCamera}
         onResetCar={handleResetCar}
         onHonk={handleHonk}
         onKeyTouch={handleKeyTouch}

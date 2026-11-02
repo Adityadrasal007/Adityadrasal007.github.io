@@ -248,3 +248,4 @@ export function createVehicleRenderer(scene) {
     update,
   };
 }
+
