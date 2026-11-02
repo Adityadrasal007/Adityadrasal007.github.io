@@ -79,7 +79,7 @@ function LandingPage() {
           </div>
 
           <div className="profile">
-            <a href="#leadership" className="profile__link">
+            <Link to="/personal" className="profile__link">
               <div className="profile__avatar">
                 <img
                   src={personalImg}
@@ -89,7 +89,7 @@ function LandingPage() {
                 <div className="profile__overlay" />
               </div>
               <span className="profile__label">Personal Universe</span>
-            </a>
+            </Link>
           </div>
         </div>
       </main>

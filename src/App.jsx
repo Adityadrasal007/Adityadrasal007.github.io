@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import LandingPage from './pages/LandingPage.jsx';
 import TechUniverse from './pages/TechUniverse.jsx';
+import PersonalUniverse from './pages/PersonalUniverse.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/tech" element={<TechUniverse />} />
+        <Route path="/personal" element={<PersonalUniverse />} />
       </Routes>
     </HashRouter>
   );
