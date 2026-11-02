@@ -421,6 +421,59 @@ export function Projects() {
           </div>
         </motion.div>
       </AnimatePresence>
+
+      {/* Research Radar & Currently in the Lab (from GitHub Profile) */}
+      <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border border-line bg-graphite/60 p-6 md:p-8 border-l-4 border-l-signal">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-signal">
+              [ Active Engineering Focus ]
+            </span>
+          </div>
+          <h4 className="mt-2 font-geist text-xl font-bold text-ash">
+            Hardware Acceleration &amp; Zero-Copy Streams
+          </h4>
+          <ul className="mt-4 space-y-3 text-sm text-dim">
+            <li className="flex items-start gap-2">
+              <span className="font-mono text-signal mt-0.5">▹</span>
+              <span>
+                <strong className="text-ash font-medium">TensorRT &amp; INT8 Quantization:</strong> Compiling custom YOLO11 architectures for sub-30ms embedded inference on edge silicon.
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="font-mono text-signal mt-0.5">▹</span>
+              <span>
+                <strong className="text-ash font-medium">Multi-Camera Synchronization:</strong> Async zero-copy ingestion pipelines engineered for concurrent 4K RTSP stream decoders.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="rounded-2xl border border-line bg-graphite/60 p-6 md:p-8 border-l-4 border-l-cyan-400">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-cyan-400">
+              [ What&apos;s in the Lab ]
+            </span>
+          </div>
+          <h4 className="mt-2 font-geist text-xl font-bold text-ash">
+            Next-Gen Annotation &amp; Compliant Ledgers
+          </h4>
+          <ul className="mt-4 space-y-3 text-sm text-dim">
+            <li className="flex items-start gap-2">
+              <span className="font-mono text-cyan-400 mt-0.5">▹</span>
+              <span>
+                <strong className="text-ash font-medium">Vision Studio v2:</strong> Zero-shot prompt-based bounding segmentation powered by embedded Meta SAM 2 backends.
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="font-mono text-cyan-400 mt-0.5">▹</span>
+              <span>
+                <strong className="text-ash font-medium">Tamper-Evident Ledger:</strong> Cryptographic SHA-256 hash chains linked to live video frames for automated court-ready industrial compliance.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </section>
   );
 }

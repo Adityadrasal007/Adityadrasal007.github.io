@@ -79,6 +79,67 @@ export function Tools() {
         <MarqueeRow tools={toolsRow1} direction="left" duration={30} />
         <MarqueeRow tools={toolsRow2} direction="right" duration={35} />
       </div>
+
+      {/* Live GitHub Telemetry & Commit Velocity from Profile */}
+      <div className="z-10 mt-12 w-full max-w-5xl px-6">
+        <div className="rounded-2xl border border-line bg-graphite/80 p-6 md:p-8 backdrop-blur-md">
+          <div className="flex flex-col gap-2 border-b border-line/60 pb-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-signal">
+                Continuous Development Telemetry
+              </p>
+              <h3 className="mt-1 font-geist text-xl font-bold tracking-tight text-ash md:text-2xl">
+                Live Repository Pulse & Commit Velocity
+              </h3>
+            </div>
+            <a
+              href="https://github.com/Adityadrasal007"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-line bg-void px-3.5 py-1.5 font-mono text-xs text-dim transition-colors hover:border-signal/50 hover:text-signal"
+            >
+              <span>github.com/Adityadrasal007</span>
+            </a>
+          </div>
+
+          {/* GitHub Commit Heatmap */}
+          <div className="mt-6 overflow-x-auto pb-2">
+            <a
+              href="https://github.com/Adityadrasal007"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block min-w-[650px] transition-opacity hover:opacity-90"
+            >
+              <img
+                src="https://ghchart.rshah.org/FF5722/Adityadrasal007"
+                alt="Aditya Rasal GitHub Contribution Calendar"
+                className="w-full rounded-md"
+                loading="lazy"
+              />
+            </a>
+          </div>
+
+          {/* Streak Counter & Live Metrics */}
+          <div className="mt-6 flex flex-col items-center justify-between gap-6 border-t border-line/60 pt-6 sm:flex-row">
+            <div className="font-mono text-xs text-dim">
+              <span className="text-emerald-400">● Live Sync</span> with GitHub Public API · Daily Active Commits
+            </div>
+            <a
+              href="https://github.com/Adityadrasal007"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-transform hover:scale-105"
+            >
+              <img
+                src="https://streak-stats.demolab.com?user=Adityadrasal007&theme=transparent&hide_border=true&ring=FF5722&fire=FF5722&currStreakLabel=FF5722&sideLabels=9CA3AF&sideNums=E5E7EB&currStreakNum=FF5722&dates=6B7280"
+                alt="Aditya Rasal GitHub Streak"
+                className="max-h-20"
+                loading="lazy"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

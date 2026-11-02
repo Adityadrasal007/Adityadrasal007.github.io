@@ -134,8 +134,25 @@ export function Hero() {
           </div>
         </div>
 
+        {/* Recruiter HUD & Availability Pill Row */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 font-mono text-[11px] uppercase tracking-wider text-emerald-400">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            Open for 2026/2027 AI Co-Ops & Roles
+          </span>
+          <span className="rounded-full border border-line bg-graphite/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-dim">
+            Focus: <span className="text-ash">Edge Computer Vision</span>
+          </span>
+          <span className="rounded-full border border-line bg-graphite/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-dim">
+            Scale: <span className="text-ash">150+ Workforce</span>
+          </span>
+          <span className="rounded-full border border-line bg-graphite/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-dim">
+            Location: <span className="text-ash">Pune · Relocation Ready</span>
+          </span>
+        </div>
+
         {/* Center mono statement — tagline from tech.txt */}
-        <div className="mt-10 md:mt-40">
+        <div className="mt-10 md:mt-24">
           <p className="mx-auto max-w-2xl text-center font-mono text-sm font-medium uppercase tracking-wide text-dim md:text-base">
             I AM A{' '}
             <TextRotate

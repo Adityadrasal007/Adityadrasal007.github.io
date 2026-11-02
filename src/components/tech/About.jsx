@@ -289,8 +289,32 @@ export function About() {
         label="Who am I"
         title={aboutSection.title}
         subtitle={aboutSection.subtitle}
-        className="mb-12"
+        className="mb-8"
       />
+
+      {/* Executive KPI Scorecard from GitHub Dossier */}
+      <div className="mb-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="rounded-xl border border-line bg-graphite/70 p-5 border-t-2 border-t-cyan-400">
+          <p className="font-geist text-3xl font-bold text-cyan-400">0 → 1</p>
+          <p className="mt-1 font-geist text-sm font-semibold text-ash">AI Product Builder</p>
+          <p className="mt-0.5 font-mono text-[11px] text-dim">Datasets · Models · Edge Silicon</p>
+        </div>
+        <div className="rounded-xl border border-line bg-graphite/70 p-5 border-t-2 border-t-signal">
+          <p className="font-geist text-3xl font-bold text-signal">150+</p>
+          <p className="mt-1 font-geist text-sm font-semibold text-ash">Workforce Directed</p>
+          <p className="mt-0.5 font-mono text-[11px] text-dim">Student Council Cultural President</p>
+        </div>
+        <div className="rounded-xl border border-line bg-graphite/70 p-5 border-t-2 border-t-purple-400">
+          <p className="font-geist text-3xl font-bold text-purple-400">9.1 / 10</p>
+          <p className="mt-1 font-geist text-sm font-semibold text-ash">University CGPA</p>
+          <p className="mt-0.5 font-mono text-[11px] text-dim">B.Tech CSE&amp;T · PCU Graduating '27</p>
+        </div>
+        <div className="rounded-xl border border-line bg-graphite/70 p-5 border-t-2 border-t-emerald-400">
+          <p className="font-geist text-3xl font-bold text-emerald-400">10,000+</p>
+          <p className="mt-1 font-geist text-sm font-semibold text-ash">Festival Scale Managed</p>
+          <p className="mt-0.5 font-mono text-[11px] text-dim">Anantam Festival · 3 Annual Editions</p>
+        </div>
+      </div>
 
       <motion.div
         variants={containerVariants}
