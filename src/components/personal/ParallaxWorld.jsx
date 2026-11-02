@@ -245,3 +245,4 @@ export function ParallaxWorld({ cameraX, characterX, children }) {
 }
 
 export default ParallaxWorld;
+
