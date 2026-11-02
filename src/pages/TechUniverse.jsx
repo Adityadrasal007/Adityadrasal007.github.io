@@ -5,6 +5,7 @@ import { CursorSpotlight } from '../components/ui/CursorSpotlight';
 import { TechNav } from '../components/tech/TechNav';
 import { Hero } from '../components/tech/Hero';
 import { About } from '../components/tech/About';
+import { Projects } from '../components/tech/Projects';
 import { EditorialStrip } from '../components/tech/EditorialStrip';
 import { Experience } from '../components/tech/Experience';
 import { Skills } from '../components/tech/Skills';
@@ -42,6 +43,7 @@ export function TechUniverse() {
       <main className="relative z-10 overflow-x-clip">
         <Hero />
         <About />
+        <Projects />
         <EditorialStrip />
         <Experience />
         <Skills />

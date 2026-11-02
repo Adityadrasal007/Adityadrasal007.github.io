@@ -466,6 +466,7 @@ export const contactSection = {
     "Architecting scalable Vision Models and engineering unforgettable events. Let's build something extraordinary together.",
   navLinks: [
     { label: 'About', href: '#about' },
+    { label: 'Projects', href: '#projects' },
     { label: 'Experience', href: '#experience' },
     { label: 'Certifications', href: '#certifications' },
   ],
