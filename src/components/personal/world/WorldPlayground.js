@@ -12,16 +12,6 @@ import * as THREE from 'three';
 
 export const PLAYGROUND_ZONES = [
   {
-    id: 'hero',
-    name: 'Spawn Point',
-    title: 'Aditya Rasal',
-    subtitle: 'The Personal Universe',
-    description: 'Welcome to my 3D universe! Drive your RC buggy around to explore my major leadership events, mentorship stages, and extreme outdoor passions.',
-    center: [0, 0],
-    radius: 7,
-    color: '#f59e0b',
-  },
-  {
     id: 'anantam',
     name: 'Live Concert Stage',
     title: 'ANANTAM Cultural Festival',

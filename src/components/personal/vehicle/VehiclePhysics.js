@@ -12,9 +12,9 @@ import * as CANNON from 'cannon-es';
 
 export function createVehiclePhysics() {
   const world = new CANNON.World();
-  world.gravity.set(0, -9.82 * 1.5, 0); // Punchy toy-car gravity
+  world.gravity.set(0, -9.82 * 2.0, 0); // Punchy, responsive toy-car gravity
   world.broadphase = new CANNON.SAPBroadphase(world);
-  world.allowSleep = true;
+  world.allowSleep = false; // Never let the car fall asleep when waiting for input
 
   // Materials & Friction
   const groundMaterial = new CANNON.Material('ground');
@@ -22,7 +22,7 @@ export function createVehiclePhysics() {
   const obstacleMaterial = new CANNON.Material('obstacle');
 
   const wheelGroundContact = new CANNON.ContactMaterial(wheelMaterial, groundMaterial, {
-    friction: 0.65,
+    friction: 0.8,
     restitution: 0.1,
     contactEquationStiffness: 1000,
   });
@@ -34,13 +34,15 @@ export function createVehiclePhysics() {
   });
   world.addContactMaterial(obstacleContact);
 
-  // 1. Static Floor Plane
+  // 1. Static Floor Box (100x100m solid ground, top surface at y=0)
+  // Replaces infinite Plane to guarantee 100% raycast collision across all Z coordinates
+  const floorShape = new CANNON.Box(new CANNON.Vec3(50, 0.5, 50));
   const groundBody = new CANNON.Body({
     type: CANNON.Body.STATIC,
-    shape: new CANNON.Plane(),
+    shape: floorShape,
     material: groundMaterial,
+    position: new CANNON.Vec3(0, -0.5, 0),
   });
-  groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
   world.addBody(groundBody);
 
   // Playground boundary walls (90x90m arena)
@@ -65,16 +67,17 @@ export function createVehiclePhysics() {
   world.addBody(westWall);
 
   // 2. Toy RC Buggy Chassis
-  const chassisShape = new CANNON.Box(new CANNON.Vec3(1.1, 0.35, 2.0));
+  // Chassis collision shape is tucked safely inside wheels so it never drags on the floor
+  const chassisShape = new CANNON.Box(new CANNON.Vec3(0.85, 0.22, 1.4));
   const chassisBody = new CANNON.Body({
-    mass: 160,
+    mass: 120,
     material: groundMaterial,
-    angularDamping: 0.5,
-    linearDamping: 0.15,
+    angularDamping: 0.35,
+    linearDamping: 0.08,
+    allowSleep: false,
   });
-  // Center of mass lowered for anti-roll stability
-  chassisBody.addShape(chassisShape, new CANNON.Vec3(0, 0.15, 0));
-  chassisBody.position.set(0, 1.2, 0);
+  chassisBody.addShape(chassisShape, new CANNON.Vec3(0, 0.25, 0));
+  chassisBody.position.set(0, 0.9, 0);
   world.addBody(chassisBody);
 
   // 3. RaycastVehicle Setup
@@ -88,13 +91,13 @@ export function createVehiclePhysics() {
   const wheelOptions = {
     radius: 0.42,
     directionLocal: new CANNON.Vec3(0, -1, 0),
-    suspensionStiffness: 45,
-    suspensionRestLength: 0.42,
-    frictionSlip: 3.2,
-    dampingCompression: 4.5,
-    dampingRelaxation: 3.2,
+    suspensionStiffness: 35,
+    suspensionRestLength: 0.4,
+    frictionSlip: 4.2,
+    dampingCompression: 3.5,
+    dampingRelaxation: 2.2,
     maxSuspensionForce: 100000,
-    rollInfluence: 0.08,
+    rollInfluence: 0.03,
     axleLocal: new CANNON.Vec3(-1, 0, 0),
     chassisConnectionPointLocal: new CANNON.Vec3(),
     maxSuspensionTravel: 0.3,
@@ -102,11 +105,10 @@ export function createVehiclePhysics() {
     useCustomSlidingRotationalSpeed: true,
   };
 
-  // Add 4 wheels
   const wheelX = 0.95;
-  const wheelZFront = 1.35;
-  const wheelZRear = -1.35;
-  const wheelY = 0.1;
+  const wheelZFront = 1.25;
+  const wheelZRear = -1.25;
+  const wheelY = 0.05;
 
   // Front Left (0)
   wheelOptions.chassisConnectionPointLocal.set(wheelX, wheelY, wheelZFront);
@@ -126,18 +128,7 @@ export function createVehiclePhysics() {
 
   vehicle.addToWorld(world);
 
-  // Wheel kinematic collision representations
   const wheelBodies = [];
-  const wheelShape = new CANNON.Cylinder(0.42, 0.42, 0.32, 20);
-  vehicle.wheelInfos.forEach(() => {
-    const cylinderBody = new CANNON.Body({ mass: 0, material: wheelMaterial, type: CANNON.Body.KINEMATIC });
-    cylinderBody.collisionFilterGroup = 0;
-    const q = new CANNON.Quaternion();
-    q.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI / 2);
-    cylinderBody.addShape(wheelShape, new CANNON.Vec3(), q);
-    wheelBodies.push(cylinderBody);
-    world.addBody(cylinderBody);
-  });
 
   // 4. Destructible Physics Props & Obstacles
   const dynamicObstacles = [];
@@ -230,10 +221,11 @@ export function createVehiclePhysics() {
 
   // Reset Car function
   function resetCar() {
-    chassisBody.position.set(0, 1.5, 0);
+    chassisBody.position.set(0, 0.9, 0);
     chassisBody.quaternion.set(0, 0, 0, 1);
     chassisBody.velocity.set(0, 0, 0);
     chassisBody.angularVelocity.set(0, 0, 0);
+    chassisBody.wakeUp();
   }
 
   return {

@@ -75,11 +75,26 @@ export function PersonalUniverse() {
     // 3. Keyboard Listeners
     const onKeyDown = (e) => {
       const k = e.key.toLowerCase();
-      if (['w', 'arrowup'].includes(k)) controlsRef.current.forward = true;
-      if (['s', 'arrowdown'].includes(k)) controlsRef.current.backward = true;
-      if (['a', 'arrowleft'].includes(k)) controlsRef.current.left = true;
-      if (['d', 'arrowright'].includes(k)) controlsRef.current.right = true;
-      if (e.key === ' ') controlsRef.current.brake = true;
+      if (['w', 'arrowup'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.forward = true;
+      }
+      if (['s', 'arrowdown'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.backward = true;
+      }
+      if (['a', 'arrowleft'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.left = true;
+      }
+      if (['d', 'arrowright'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.right = true;
+      }
+      if (e.key === ' ') {
+        e.preventDefault();
+        controlsRef.current.brake = true;
+      }
       if (k === 'r') physics.resetCar();
       if (k === 'h') sound.playHorn();
       if (k === 'c') {
@@ -89,15 +104,31 @@ export function PersonalUniverse() {
 
     const onKeyUp = (e) => {
       const k = e.key.toLowerCase();
-      if (['w', 'arrowup'].includes(k)) controlsRef.current.forward = false;
-      if (['s', 'arrowdown'].includes(k)) controlsRef.current.backward = false;
-      if (['a', 'arrowleft'].includes(k)) controlsRef.current.left = false;
-      if (['d', 'arrowright'].includes(k)) controlsRef.current.right = false;
-      if (e.key === ' ') controlsRef.current.brake = false;
+      if (['w', 'arrowup'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.forward = false;
+      }
+      if (['s', 'arrowdown'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.backward = false;
+      }
+      if (['a', 'arrowleft'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.left = false;
+      }
+      if (['d', 'arrowright'].includes(k)) {
+        e.preventDefault();
+        controlsRef.current.right = false;
+      }
+      if (e.key === ' ') {
+        e.preventDefault();
+        controlsRef.current.brake = false;
+      }
     };
 
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
+    window.focus();
 
     // 4. Resize Handler
     const onResize = () => {
@@ -111,9 +142,9 @@ export function PersonalUniverse() {
     let lastTime = performance.now();
     let animId = null;
 
-    const maxEngineForce = 520;
-    const maxBrakeForce = 65;
-    const maxSteerAngle = 0.52;
+    const maxEngineForce = 1200;
+    const maxBrakeForce = 60;
+    const maxSteerAngle = 0.45;
 
     const isoOffset = new THREE.Vector3(-14, 18, 14);
     const targetPos = new THREE.Vector3();
@@ -127,41 +158,37 @@ export function PersonalUniverse() {
       const ctrl = controlsRef.current;
       const vehicle = physics.vehicle;
 
-      // Engine Drive Force (Rear Wheels: 2 and 3)
+      // Ensure chassis body never falls asleep when control inputs are active
+      if (ctrl.forward || ctrl.backward || ctrl.left || ctrl.right || ctrl.brake) {
+        physics.chassisBody.wakeUp();
+      }
+
+      // AWD Engine Drive Force on all 4 wheels for instantaneous, punchy RC acceleration
       if (ctrl.forward) {
-        vehicle.applyEngineForce(-maxEngineForce, 2);
-        vehicle.applyEngineForce(-maxEngineForce, 3);
+        for (let i = 0; i < 4; i++) vehicle.applyEngineForce(-maxEngineForce, i);
       } else if (ctrl.backward) {
-        vehicle.applyEngineForce(maxEngineForce * 0.7, 2);
-        vehicle.applyEngineForce(maxEngineForce * 0.7, 3);
+        for (let i = 0; i < 4; i++) vehicle.applyEngineForce(maxEngineForce * 0.75, i);
       } else {
-        vehicle.applyEngineForce(0, 2);
-        vehicle.applyEngineForce(0, 3);
+        for (let i = 0; i < 4; i++) vehicle.applyEngineForce(0, i);
       }
 
       // Steering (Front Wheels: 0 and 1)
       if (ctrl.left) {
-        vehicle.setSteeringValue(maxSteerAngle, 0);
-        vehicle.setSteeringValue(maxSteerAngle, 1);
-      } else if (ctrl.right) {
         vehicle.setSteeringValue(-maxSteerAngle, 0);
         vehicle.setSteeringValue(-maxSteerAngle, 1);
+      } else if (ctrl.right) {
+        vehicle.setSteeringValue(maxSteerAngle, 0);
+        vehicle.setSteeringValue(maxSteerAngle, 1);
       } else {
         vehicle.setSteeringValue(0, 0);
         vehicle.setSteeringValue(0, 1);
       }
 
-      // Handbrake
+      // Handbrake (All 4 wheels)
       if (ctrl.brake) {
-        vehicle.setBrake(maxBrakeForce, 0);
-        vehicle.setBrake(maxBrakeForce, 1);
-        vehicle.setBrake(maxBrakeForce, 2);
-        vehicle.setBrake(maxBrakeForce, 3);
+        for (let i = 0; i < 4; i++) vehicle.setBrake(maxBrakeForce, i);
       } else {
-        vehicle.setBrake(0, 0);
-        vehicle.setBrake(0, 1);
-        vehicle.setBrake(0, 2);
-        vehicle.setBrake(0, 3);
+        for (let i = 0; i < 4; i++) vehicle.setBrake(0, i);
       }
 
       // Step Physics World
