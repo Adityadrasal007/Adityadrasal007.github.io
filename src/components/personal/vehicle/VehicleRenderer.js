@@ -147,6 +147,16 @@ export function createVehicleRenderer(scene) {
   flag.position.set(-0.75, 2.0, -1.45);
   chassisMesh.add(flag);
 
+  // Dual Rear Brake Lights
+  const taillightMat = new THREE.MeshBasicMaterial({ color: 0x7f1d1d });
+  const tlLeft = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.15, 0.05), taillightMat);
+  tlLeft.position.set(0.7, 0.45, -1.9);
+  chassisMesh.add(tlLeft);
+
+  const tlRight = tlLeft.clone();
+  tlRight.position.x = -0.7;
+  chassisMesh.add(tlRight);
+
   scene.add(chassisMesh);
 
   // 2. Chunky 3D Wheels
@@ -220,10 +230,18 @@ export function createVehicleRenderer(scene) {
   }
 
   // 4. Update Function: syncs Three.js meshes with Cannon physics
-  function update(vehicle, dt) {
+  function update(vehicle, dt, isBraking = false) {
     // Sync Chassis
     chassisMesh.position.copy(vehicle.chassisBody.position);
     chassisMesh.quaternion.copy(vehicle.chassisBody.quaternion);
+
+    // Dynamic Suspension Body Roll (Leans into sharp turns)
+    const angularVelY = vehicle.chassisBody.angularVelocity.y;
+    const rollAngle = -angularVelY * 0.04;
+    chassisMesh.rotateZ(rollAngle);
+
+    // Brake lights reaction
+    taillightMat.color.setHex(isBraking ? 0xef4444 : 0x7f1d1d);
 
     // Sync Wheels
     for (let i = 0; i < vehicle.wheelInfos.length; i++) {

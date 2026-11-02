@@ -4,6 +4,7 @@ import { createVehiclePhysics } from '../components/personal/vehicle/VehiclePhys
 import { createVehicleRenderer } from '../components/personal/vehicle/VehicleRenderer';
 import { createWorldPlayground, PLAYGROUND_ZONES } from '../components/personal/world/WorldPlayground';
 import { createWorldProps } from '../components/personal/world/WorldProps';
+import { createEnvironmentLighting } from '../components/personal/world/EnvironmentLighting';
 import { createSkidMarks } from '../components/personal/vehicle/SkidMarks';
 import sound from '../components/personal/audio/SoundEngine';
 import DrivingHUD from '../components/personal/vehicle/DrivingHUD';
@@ -13,6 +14,7 @@ export function PersonalUniverse() {
   const [speed, setSpeed] = useState(0);
   const [activeZone, setActiveZone] = useState(null);
   const [cameraMode, setCameraMode] = useState('isometric'); // 'isometric' | 'chase'
+  const [climate, setClimate] = useState('sunset'); // 'sunset' | 'night' | 'dawn' | 'noon'
 
   const controlsRef = useRef({
     forward: false,
@@ -23,7 +25,9 @@ export function PersonalUniverse() {
   });
 
   const resetCarRef = useRef(null);
+  const climateEngineRef = useRef(null);
   const cameraModeRef = useRef('isometric');
+  const flippedTimerRef = useRef(0);
 
   useEffect(() => {
     cameraModeRef.current = cameraMode;
@@ -35,8 +39,8 @@ export function PersonalUniverse() {
 
     // 1. Three.js Scene, Camera, Renderer
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0c0d14);
-    scene.fog = new THREE.FogExp2(0x0c0d14, 0.012);
+    scene.background = new THREE.Color(0x22121e);
+    scene.fog = new THREE.FogExp2(0x22121e, 0.012);
 
     const camera = new THREE.PerspectiveCamera(
       42,
@@ -60,9 +64,11 @@ export function PersonalUniverse() {
     const vehicleVisuals = createVehicleRenderer(scene);
     const playground = createWorldPlayground(scene, physics.dynamicObstacles);
     const worldProps = createWorldProps(scene);
+    const environmentLighting = createEnvironmentLighting(scene);
     const skidMarks = createSkidMarks(scene);
 
     resetCarRef.current = physics.resetCar;
+    climateEngineRef.current = environmentLighting;
 
     // Collision sound trigger
     physics.chassisBody.addEventListener('collide', (e) => {
@@ -95,10 +101,17 @@ export function PersonalUniverse() {
         e.preventDefault();
         controlsRef.current.brake = true;
       }
-      if (k === 'r') physics.resetCar();
+      if (k === 'r') {
+        physics.resetCar();
+        flippedTimerRef.current = 0;
+      }
       if (k === 'h') sound.playHorn();
       if (k === 'c') {
         setCameraMode((m) => (m === 'isometric' ? 'chase' : 'isometric'));
+      }
+      if (k === 'n') {
+        const next = environmentLighting.cycleClimate();
+        setClimate(next);
       }
     };
 
@@ -213,10 +226,31 @@ export function PersonalUniverse() {
       sound.updateSkid(isDrifting);
 
       // Sync Visuals
-      vehicleVisuals.update(vehicle, dt);
+      const isBraking = ctrl.brake || ctrl.backward;
+      vehicleVisuals.update(vehicle, dt, isBraking);
       playground.update();
       worldProps.update(dt);
+      environmentLighting.update(dt, renderer);
       skidMarks.update(vehicle, isDrifting);
+
+      // Automatic Rollover Recovery (If upside down or severely overturned for > 1.2s)
+      const upVector = new THREE.Vector3(0, 1, 0).applyQuaternion(
+        vehicleVisuals.chassisMesh.quaternion
+      );
+      if (upVector.y < 0.25) {
+        flippedTimerRef.current += dt;
+        if (flippedTimerRef.current > 1.2) {
+          flippedTimerRef.current = 0;
+          physics.chassisBody.position.y += 1.6;
+          physics.chassisBody.quaternion.set(0, 0, 0, 1);
+          physics.chassisBody.velocity.set(0, 2.5, 0);
+          physics.chassisBody.angularVelocity.set(0, 0, 0);
+          physics.chassisBody.wakeUp();
+          sound.playImpact(1.0);
+        }
+      } else {
+        flippedTimerRef.current = 0;
+      }
 
       // Camera Tracking
       const carPos = physics.chassisBody.position;
@@ -289,6 +323,13 @@ export function PersonalUniverse() {
     resetCarRef.current?.();
   }, []);
 
+  const handleCycleClimate = useCallback(() => {
+    if (climateEngineRef.current) {
+      const next = climateEngineRef.current.cycleClimate();
+      setClimate(next);
+    }
+  }, []);
+
   const handleHonk = useCallback(() => {
     sound.playHorn();
   }, []);
@@ -307,6 +348,8 @@ export function PersonalUniverse() {
         speed={speed}
         activeZone={activeZone}
         cameraMode={cameraMode}
+        climate={climate}
+        onCycleClimate={handleCycleClimate}
         onToggleCamera={handleToggleCamera}
         onResetCar={handleResetCar}
         onHonk={handleHonk}

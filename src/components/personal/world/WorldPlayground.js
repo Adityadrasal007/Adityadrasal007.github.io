@@ -42,6 +42,16 @@ export const PLAYGROUND_ZONES = [
     color: '#10b981',
   },
   {
+    id: 'beach',
+    name: 'Coastal Beach & Sea',
+    title: 'Tropical Ocean & River Delta',
+    subtitle: 'Warm Sand, Surf & Palm Groves',
+    description: 'Where the river flows into the turquoise sea: golden beach sand, ocean waves, coconut palms, and wooden bridge crossings.',
+    center: [-24, 24],
+    radius: 10,
+    color: '#06b6d4',
+  },
+  {
     id: 'contact',
     name: 'The Finish Line',
     title: 'Connect with Aditya',
@@ -54,44 +64,149 @@ export const PLAYGROUND_ZONES = [
 ];
 
 export function createWorldPlayground(scene, dynamicObstacles) {
-  // 1. Lighting Setup (Soft Studio Sunlight)
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
-  scene.add(ambientLight);
-
-  const sunLight = new THREE.DirectionalLight(0xfff5eb, 2.8);
-  sunLight.position.set(30, 45, 25);
-  sunLight.castShadow = true;
-  sunLight.shadow.mapSize.width = 2048;
-  sunLight.shadow.mapSize.height = 2048;
-  sunLight.shadow.camera.near = 5;
-  sunLight.shadow.camera.far = 130;
-  const d = 50;
-  sunLight.shadow.camera.left = -d;
-  sunLight.shadow.camera.right = d;
-  sunLight.shadow.camera.top = d;
-  sunLight.shadow.camera.bottom = -d;
-  sunLight.shadow.bias = -0.0004;
-  scene.add(sunLight);
-
-  const hemiLight = new THREE.HemisphereLight(0xdbeafe, 0x1e1b4b, 0.8);
-  scene.add(hemiLight);
-
-  // 2. Playground Floor (Warm Slate Tabletop)
-  const floorGeo = new THREE.PlaneGeometry(90, 90);
+  // 1. Playground Base Floor (Terracotta / Warm Slate Tabletop)
+  const floorGeo = new THREE.PlaneGeometry(94, 94);
   const floorMat = new THREE.MeshStandardMaterial({
-    color: 0x13141c, // Sleek dark slate floor
-    roughness: 0.65,
-    metalness: 0.1,
+    color: 0x161824,
+    roughness: 0.7,
+    metalness: 0.08,
   });
   const floor = new THREE.Mesh(floorGeo, floorMat);
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
 
-  // Floor Grid & Track Markings
+  // Subtle Floor Grid & Markings
   const gridHelper = new THREE.GridHelper(90, 45, 0x3b82f6, 0x1e293b);
-  gridHelper.position.y = 0.01;
+  gridHelper.position.y = 0.005;
   scene.add(gridHelper);
+
+  // 2. Continuous Racing Circuit Track (Paved asphalt ribbons & markings)
+  const trackMat = new THREE.MeshStandardMaterial({
+    color: 0x10121a,
+    roughness: 0.85,
+    metalness: 0.1,
+  });
+
+  function createRoadSegment(x, z, w, d, rotY = 0) {
+    const road = new THREE.Mesh(new THREE.PlaneGeometry(w, d), trackMat);
+    road.rotation.x = -Math.PI / 2;
+    road.rotation.z = rotY;
+    road.position.set(x, 0.012, z);
+    road.receiveShadow = true;
+    scene.add(road);
+    return road;
+  }
+
+  // A. Main Starting Runway (x: 0, from z: -14 to +32)
+  createRoadSegment(0, 9, 7.5, 46);
+
+  // Starting Grid Boxes & Lines
+  const whitePaintMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const yellowPaintMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
+
+  for (let z = 2; z <= 22; z += 6) {
+    [-2.2, 2.2].forEach((gx) => {
+      const gridBox = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 3.2), whitePaintMat);
+      gridBox.rotation.x = -Math.PI / 2;
+      gridBox.position.set(gx, 0.014, z);
+      scene.add(gridBox);
+
+      // Inner cutout
+      const inner = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.8), trackMat);
+      inner.rotation.x = -Math.PI / 2;
+      inner.position.set(gx, 0.015, z);
+      scene.add(inner);
+    });
+  }
+
+  // Dashed Centerline along main runway
+  for (let z = -12; z <= 28; z += 3.5) {
+    const dash = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 1.8), whitePaintMat);
+    dash.rotation.x = -Math.PI / 2;
+    dash.position.set(0, 0.014, z);
+    scene.add(dash);
+  }
+
+  // B. Cross Road (Connecting Bridge [-14, 0] to Main Runway [0, 0] to East Side [24, 0])
+  createRoadSegment(5, 0, 18, 6.5, Math.PI / 2);
+  createRoadSegment(-7, 0, 14, 6.5, Math.PI / 2);
+  createRoadSegment(-21, 0, 10, 6.5, Math.PI / 2);
+
+  // C. North-West Road to ANANTAM Concert Stage ([-24, -20])
+  createRoadSegment(-24, -10, 7.0, 20);
+
+  // D. North-East Road to TEDx Amphitheater ([24, -20])
+  createRoadSegment(24, -10, 7.0, 20);
+
+  // E. South-East Road to Mountain Ascent ([24, 15])
+  createRoadSegment(24, 8, 6.5, 16);
+
+  // F. South-West Road to Tropical Beach ([-24, 20])
+  createRoadSegment(-24, 12, 6.5, 24);
+
+  // Rumble Strips / Curbs (Alternating Red and White Blocks on Track Curves)
+  const curbRedMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.4 });
+  const curbWhiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4 });
+
+  function createCurbLine(startX, startZ, length, isHorizontal = false) {
+    const count = Math.floor(length / 0.8);
+    for (let i = 0; i < count; i++) {
+      const mat = i % 2 === 0 ? curbRedMat : curbWhiteMat;
+      const curb = new THREE.Mesh(
+        new THREE.BoxGeometry(isHorizontal ? 0.8 : 0.4, 0.08, isHorizontal ? 0.4 : 0.8),
+        mat
+      );
+      curb.position.set(
+        startX + (isHorizontal ? i * 0.8 : 0),
+        0.04,
+        startZ + (isHorizontal ? 0 : i * 0.8)
+      );
+      curb.castShadow = true;
+      curb.receiveShadow = true;
+      scene.add(curb);
+    }
+  }
+
+  createCurbLine(-3.9, -12, 42); // Left curb along main runway
+  createCurbLine(3.9, -12, 42);  // Right curb along main runway
+
+  // 3. Winding River Surface (Running along x: -14 from z: -38 to +26)
+  const riverMat = new THREE.MeshStandardMaterial({
+    color: 0x06b6d4,
+    roughness: 0.1,
+    metalness: 0.4,
+    transparent: true,
+    opacity: 0.88,
+  });
+
+  const riverGeo = new THREE.PlaneGeometry(6.8, 66);
+  const riverMesh = new THREE.Mesh(riverGeo, riverMat);
+  riverMesh.rotation.x = -Math.PI / 2;
+  riverMesh.position.set(-14, 0.018, -6);
+  riverMesh.receiveShadow = true;
+  scene.add(riverMesh);
+
+  // River foam banks
+  const foamMat = new THREE.MeshBasicMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.6 });
+  [-17.3, -10.7].forEach((fx) => {
+    const foam = new THREE.Mesh(new THREE.PlaneGeometry(0.35, 66), foamMat);
+    foam.rotation.x = -Math.PI / 2;
+    foam.position.set(fx, 0.02, -6);
+    scene.add(foam);
+  });
+
+  // 4. Tropical Sandy Beach Bay (in South-West: [-24, 24])
+  const sandGeo = new THREE.CircleGeometry(12, 32);
+  const sandMat = new THREE.MeshStandardMaterial({
+    color: 0xd97706,
+    roughness: 0.95,
+  });
+  const sandMesh = new THREE.Mesh(sandGeo, sandMat);
+  sandMesh.rotation.x = -Math.PI / 2;
+  sandMesh.position.set(-24, 0.016, 24);
+  sandMesh.receiveShadow = true;
+  scene.add(sandMesh);
 
   // 3. Create Meshes for Physics Obstacles (Blocks & Pins)
   const obstacleMeshes = [];
@@ -135,6 +250,21 @@ export function createWorldPlayground(scene, dynamicObstacles) {
         flatShading: true,
       });
       mesh = new THREE.Mesh(rockGeo, rockMat);
+    } else if (item.label.startsWith('crate')) {
+      // Bruno Simon Wooden Crate with Red Metal Reinforcement Bands
+      const crateGroup = new THREE.Group();
+      const woodBody = new THREE.Mesh(
+        new THREE.BoxGeometry(w, h, depth),
+        new THREE.MeshStandardMaterial({ color: 0x9a3412, roughness: 0.7 })
+      );
+      crateGroup.add(woodBody);
+
+      // Red corner brackets & straps (like in user screenshot)
+      const strapMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.3, roughness: 0.4 });
+      const strapX = new THREE.Mesh(new THREE.BoxGeometry(w * 1.02, h * 0.18, depth * 1.02), strapMat);
+      crateGroup.add(strapX);
+
+      mesh = crateGroup;
     } else {
       // Colorful wooden toy block
       const color = blockColors[idx % blockColors.length];

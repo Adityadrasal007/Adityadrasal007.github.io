@@ -196,13 +196,28 @@ export function createVehiclePhysics() {
     const q = new CANNON.Quaternion();
     const qx = new CANNON.Quaternion();
     const qy = new CANNON.Quaternion();
+    const qz = new CANNON.Quaternion();
     qx.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), rotX);
     qy.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), rotY);
+    qz.setFromAxisAngle(new CANNON.Vec3(0, 0, 1), rotZ);
     qy.mult(qx, q);
+    qz.mult(q, q);
     rampBody.addShape(rampShape, new CANNON.Vec3(), q);
     rampBody.position.set(x, y, z);
     world.addBody(rampBody);
   }
+
+  // Stacked Wooden Crates (like in Bruno Simon screenshot)
+  const cratePositions = [
+    [-6.5, 0.5, -2.5],
+    [-6.5, 1.35, -2.5],
+    [-5.6, 0.5, -2.5],
+    [6.5, 0.5, -2.5],
+    [6.5, 1.35, -2.5],
+  ];
+  cratePositions.forEach(([cx, cy, cz], i) => {
+    addPhysicsBox(cx, cy, cz, 0.85, 0.85, 0.85, 12, `crate_${i}`);
+  });
 
   // Ramp onto Anantam stage
   addRamp(-24, 0.4, -14.5, 4.0, 0.3, 5.0, 0.16, 0);
@@ -214,10 +229,17 @@ export function createVehiclePhysics() {
   world.addBody(tedxStage);
 
   // C. Mountain Climbing Offroad Terrain Ascent (24, y, 20)
-  // Stepped rocky terrain ramps leading to summit
   addRamp(24, 0.6, 14, 5.5, 0.4, 6.0, -0.22, 0); // Climb segment 1
   addRamp(24, 1.6, 18, 5.0, 0.4, 6.0, -0.25, 0); // Climb segment 2
   addRamp(24, 2.5, 23, 6.0, 0.5, 6.0, 0, 0);     // Summit Flat Peak
+
+  // D. Arched Wooden Bridge Crossing over River (at x: -14, z: 0)
+  addRamp(-10.5, 0.42, 0, 3.5, 0.25, 4.5, 0, 0, 0.16);
+  const bridgeDeck = new CANNON.Body({ type: CANNON.Body.STATIC, material: groundMaterial });
+  bridgeDeck.addShape(new CANNON.Box(new CANNON.Vec3(2.2, 0.15, 2.25)));
+  bridgeDeck.position.set(-14, 0.72, 0);
+  world.addBody(bridgeDeck);
+  addRamp(-17.5, 0.42, 0, 3.5, 0.25, 4.5, 0, 0, -0.16);
 
   // Reset Car function
   function resetCar() {

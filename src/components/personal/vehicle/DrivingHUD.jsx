@@ -21,6 +21,8 @@ export function DrivingHUD({
   speed = 0,
   activeZone = null,
   cameraMode = 'isometric',
+  climate = 'sunset',
+  onCycleClimate,
   onToggleCamera,
   onResetCar,
   onHonk,
@@ -28,6 +30,14 @@ export function DrivingHUD({
 }) {
   const [muted, setMuted] = useState(true);
   const [dismissedZone, setDismissedZone] = useState(null);
+
+  const climateIcons = {
+    sunset: '🌅',
+    night: '🌙',
+    dawn: '🌄',
+    noon: '☀️',
+  };
+  const climateIcon = climateIcons[climate] || '🌅';
 
   // Clear dismissed zone when user drives away from a zone
   useEffect(() => {
@@ -107,6 +117,17 @@ export function DrivingHUD({
           >
             <Camera className="h-3.5 w-3.5 text-amber-400" />
             <span className="hidden sm:inline">Cam [C]</span>
+          </button>
+
+          {/* Day / Night Climate Shift */}
+          <button
+            type="button"
+            onClick={onCycleClimate}
+            title="Cycle Day / Night Climate [N]"
+            className="flex h-9 items-center gap-1.5 rounded-full border border-white/15 bg-black/60 px-3 text-xs font-mono uppercase text-ash shadow-2xl backdrop-blur-2xl transition-all hover:border-amber-400/50 hover:text-white cursor-pointer"
+          >
+            <span className="text-sm">{climateIcon}</span>
+            <span className="hidden sm:inline capitalize">{climate} [N]</span>
           </button>
 
           {/* Horn */}
@@ -233,11 +254,15 @@ export function DrivingHUD({
         {/* Driving Instructions Hint (Desktop) */}
         <div className="hidden md:flex items-center gap-2 rounded-full border border-white/10 bg-black/60 px-4 py-2 font-mono text-[11px] uppercase tracking-wider text-ash backdrop-blur-xl">
           <Navigation className="h-3.5 w-3.5 text-amber-400" />
-          <span>[W][A][S][D] / Arrows to Drive</span>
+          <span>[W][A][S][D] / Arrows</span>
           <span className="text-white/30">•</span>
           <span>[Space] Drift</span>
           <span className="text-white/30">•</span>
+          <span>[N] Day/Night</span>
+          <span className="text-white/30">•</span>
           <span>[C] Cam</span>
+          <span className="text-white/30">•</span>
+          <span>[R] Flip/Reset</span>
           <span className="text-white/30">•</span>
           <span>[H] Horn</span>
         </div>
