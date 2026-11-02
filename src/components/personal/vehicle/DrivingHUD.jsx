@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -11,6 +11,7 @@ import {
   Volume2,
   VolumeX,
   Camera,
+  X,
 } from 'lucide-react';
 import { FaLinkedinIn, FaGithub } from 'react-icons/fa6';
 import resumePdf from '../../../assets/Resume-Aditya.pdf';
@@ -26,12 +27,38 @@ export function DrivingHUD({
   onKeyTouch,
 }) {
   const [muted, setMuted] = useState(true);
+  const [dismissedZone, setDismissedZone] = useState(null);
+
+  // Clear dismissed zone when user drives away from a zone
+  useEffect(() => {
+    if (!activeZone) {
+      setDismissedZone(null);
+    }
+  }, [activeZone]);
+
+  // Pressing Escape closes the active zone card
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && activeZone) {
+        setDismissedZone(activeZone.id);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeZone]);
 
   const handleToggleSound = () => {
     const next = !muted;
     setMuted(next);
     sound.setMuted(next);
   };
+
+  // NEVER show a popup modal for the spawn point ('hero'), and respect dismissed zones
+  const showCard = Boolean(
+    activeZone &&
+    activeZone.id !== 'hero' &&
+    dismissedZone !== activeZone.id
+  );
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 flex flex-col justify-between p-4 md:p-6 select-none font-geist">
@@ -106,9 +133,9 @@ export function DrivingHUD({
         </div>
       </div>
 
-      {/* Center Zone Information Card (Pops up when parked inside a zone) */}
-      {activeZone && (
-        <div className="pointer-events-auto mx-auto max-w-lg w-full rounded-2xl border border-white/15 bg-[#10121a]/95 p-5 md:p-6 shadow-[0_25px_60px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.18)] backdrop-blur-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
+      {/* Zone Information Card (Never pops up for spawn point; non-blocking side position with close button) */}
+      {showCard && (
+        <div className="pointer-events-auto fixed bottom-24 right-4 md:right-8 z-40 max-w-sm sm:max-w-md w-full rounded-2xl border border-white/15 bg-[#10121a]/95 p-5 shadow-[0_25px_60px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.18)] backdrop-blur-2xl transition-all animate-in fade-in slide-in-from-bottom-4 duration-200">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <span
@@ -119,7 +146,17 @@ export function DrivingHUD({
                 {activeZone.name}
               </span>
             </div>
-            <span className="font-mono text-[10px] text-amber-400 uppercase font-semibold">Active Zone</span>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[10px] text-amber-400 uppercase font-semibold">Active Zone</span>
+              <button
+                type="button"
+                onClick={() => setDismissedZone(activeZone.id)}
+                title="Close [Esc]"
+                className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-ash hover:bg-white/20 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
 
           <h3 className="mt-3 font-geist text-xl font-bold tracking-tight text-white md:text-2xl">
