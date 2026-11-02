@@ -208,62 +208,46 @@ export function Projects() {
         {/* Project 1: Vision Flow */}
         <div
           className={cn(
-            'flex flex-col items-center rounded-2xl p-6 transition-all duration-300',
+            'flex w-full max-w-[420px] flex-col items-center rounded-2xl border p-6 md:p-7 transition-all duration-300 cursor-pointer',
             activeProjectId === 'vision-flow'
-              ? 'bg-graphite/70 ring-1 ring-signal/40 shadow-[0_0_40px_rgba(255,87,34,0.1)]'
-              : 'bg-void/40 hover:bg-graphite/40',
+              ? 'border-amber-500/50 bg-[#0d0e12]/90 shadow-[0_0_50px_rgba(255,140,0,0.12)]'
+              : 'border-white/[0.08] bg-[#0c0d11]/60 hover:border-amber-500/30 hover:bg-[#0d0e12]/80',
           )}
           onClick={() => handleSelectProject('vision-flow')}
         >
-          <div className="mb-4 flex w-full items-center justify-between px-2">
-            <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-signal">
-              [ 01 / Production Edge AI ]
+          <div className="mb-6 flex w-full items-center justify-between px-1">
+            <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-amber-400 font-semibold">
+              [ 01 / PRODUCTION EDGE AI ]
             </span>
-            <span className="rounded-full border border-signal/30 bg-signal/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-signal">
+            <span className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-amber-300 font-medium">
               ~45ms Latency
             </span>
           </div>
 
-          <GlassFolder
-            label="VISION FLOW"
-            meta="Edge AI Live Detection"
-            accentColor="#ff5722"
-            files={PROJECTS_DATA['vision-flow'].files}
-            width={340}
-            open={activeProjectId === 'vision-flow'}
-            onOpenChange={(isOpen) => {
-              if (isOpen) setActiveProjectId('vision-flow');
-            }}
-            onFileSelect={(file) => {
-              setActiveProjectId('vision-flow');
-              setSelectedFile(file);
-            }}
-            menu={[
-              {
-                label: 'Request Demo via LinkedIn',
-                onSelect: () =>
-                  window.open(
-                    `https://www.linkedin.com/in/adityarasal007`,
-                    '_blank',
-                  ),
-              },
-              {
-                label: 'Inquire via Email',
-                onSelect: () =>
-                  window.open(
-                    `mailto:adityadrasal007@gmail.com?subject=${encodeURIComponent(
-                      PROJECTS_DATA['vision-flow'].emailSubject,
-                    )}`,
-                    '_blank',
-                  ),
-              },
-            ]}
-          />
+          <div className="py-2 flex justify-center w-full">
+            <GlassFolder
+              label="VISION FLOW"
+              meta="EDGE AI LIVE DETECTION"
+              tone="dark"
+              art="ember"
+              files={PROJECTS_DATA['vision-flow'].files}
+              width={340}
+              open={activeProjectId === 'vision-flow'}
+              onOpenChange={(isOpen) => {
+                if (isOpen) setActiveProjectId('vision-flow');
+              }}
+              onFileSelect={(file) => {
+                setActiveProjectId('vision-flow');
+                setSelectedFile(file);
+              }}
+              action="none"
+            />
+          </div>
 
-          <div className="mt-6 flex w-full items-center justify-between px-2">
+          <div className="mt-6 flex w-full items-center justify-between px-1">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-signal animate-pulse" />
-              <span className="font-mono text-xs text-ash">Vision Flow</span>
+              <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+              <span className="font-mono text-xs text-ash font-medium">Vision Flow</span>
             </div>
             <button
               type="button"
@@ -271,10 +255,10 @@ export function Projects() {
                 e.stopPropagation();
                 handleSelectProject('vision-flow');
               }}
-              className="group inline-flex items-center gap-1 font-mono text-xs uppercase tracking-wider text-signal hover:underline cursor-pointer"
+              className="group inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-amber-400 hover:text-amber-300 cursor-pointer"
             >
               Inspect Specs
-              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
         </div>
@@ -282,62 +266,66 @@ export function Projects() {
         {/* Project 2: Vision Studio */}
         <div
           className={cn(
-            'flex flex-col items-center rounded-2xl p-6 transition-all duration-300',
+            'flex w-full max-w-[420px] flex-col items-center rounded-2xl border p-6 md:p-7 transition-all duration-300 cursor-pointer',
             activeProjectId === 'vision-studio'
-              ? 'bg-graphite/70 ring-1 ring-purple-500/40 shadow-[0_0_40px_rgba(139,92,246,0.1)]'
-              : 'bg-void/40 hover:bg-graphite/40',
+              ? 'border-purple-500/50 bg-[#0d0e12]/90 shadow-[0_0_50px_rgba(139,92,246,0.12)]'
+              : 'border-white/[0.08] bg-[#0c0d11]/60 hover:border-purple-500/30 hover:bg-[#0d0e12]/80',
           )}
           onClick={() => handleSelectProject('vision-studio')}
         >
-          <div className="mb-4 flex w-full items-center justify-between px-2">
-            <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-purple-400">
-              [ 02 / Offline Model Studio ]
+          <div className="mb-6 flex w-full items-center justify-between px-1">
+            <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-purple-400 font-semibold">
+              [ 02 / OFFLINE MODEL STUDIO ]
             </span>
-            <span className="rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-purple-300">
+            <span className="rounded-full border border-purple-500/40 bg-purple-500/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-purple-300 font-medium">
               Zero Cloud Cost
             </span>
           </div>
 
-          <GlassFolder
-            label="VISION STUDIO"
-            meta="Offline Model Studio"
-            accentColor="#8b5cf6"
-            files={PROJECTS_DATA['vision-studio'].files}
-            width={340}
-            open={activeProjectId === 'vision-studio'}
-            onOpenChange={(isOpen) => {
-              if (isOpen) setActiveProjectId('vision-studio');
-            }}
-            onFileSelect={(file) => {
-              setActiveProjectId('vision-studio');
-              setSelectedFile(file);
-            }}
-            menu={[
-              {
-                label: 'Request Demo via LinkedIn',
-                onSelect: () =>
-                  window.open(
-                    `https://www.linkedin.com/in/adityarasal007`,
-                    '_blank',
-                  ),
-              },
-              {
-                label: 'Inquire via Email',
-                onSelect: () =>
-                  window.open(
-                    `mailto:adityadrasal007@gmail.com?subject=${encodeURIComponent(
-                      PROJECTS_DATA['vision-studio'].emailSubject,
-                    )}`,
-                    '_blank',
-                  ),
-              },
-            ]}
-          />
+          <div className="py-2 flex justify-center w-full">
+            <GlassFolder
+              label="VISION STUDIO"
+              meta="OFFLINE MODEL STUDIO"
+              tone="dark"
+              art="dusk"
+              files={PROJECTS_DATA['vision-studio'].files}
+              width={340}
+              open={activeProjectId === 'vision-studio'}
+              onOpenChange={(isOpen) => {
+                if (isOpen) setActiveProjectId('vision-studio');
+              }}
+              onFileSelect={(file) => {
+                setActiveProjectId('vision-studio');
+                setSelectedFile(file);
+              }}
+              action="more"
+              menu={[
+                {
+                  label: 'Request Demo via LinkedIn',
+                  onSelect: () =>
+                    window.open(
+                      `https://www.linkedin.com/in/adityarasal007`,
+                      '_blank',
+                    ),
+                },
+                {
+                  label: 'Inquire via Email',
+                  onSelect: () =>
+                    window.open(
+                      `mailto:adityadrasal007@gmail.com?subject=${encodeURIComponent(
+                        PROJECTS_DATA['vision-studio'].emailSubject,
+                      )}`,
+                      '_blank',
+                    ),
+                },
+              ]}
+            />
+          </div>
 
-          <div className="mt-6 flex w-full items-center justify-between px-2">
+          <div className="mt-6 flex w-full items-center justify-between px-1">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
-              <span className="font-mono text-xs text-ash">Vision Studio</span>
+              <span className="font-mono text-xs text-ash font-medium">Vision Studio</span>
             </div>
             <button
               type="button"
@@ -345,10 +333,10 @@ export function Projects() {
                 e.stopPropagation();
                 handleSelectProject('vision-studio');
               }}
-              className="group inline-flex items-center gap-1 font-mono text-xs uppercase tracking-wider text-purple-400 hover:underline cursor-pointer"
+              className="group inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-purple-400 hover:text-purple-300 cursor-pointer"
             >
               Inspect Specs
-              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </button>
           </div>
         </div>
