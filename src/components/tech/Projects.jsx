@@ -227,9 +227,7 @@ export function Projects() {
           <GlassFolder
             label="VISION FLOW"
             meta="Edge AI Live Detection"
-            tone="dark"
-            art="ember"
-            image={visionFlowBanner}
+            accentColor="#ff5722"
             files={PROJECTS_DATA['vision-flow'].files}
             width={340}
             open={activeProjectId === 'vision-flow'}
@@ -303,9 +301,7 @@ export function Projects() {
           <GlassFolder
             label="VISION STUDIO"
             meta="Offline Model Studio"
-            tone="dark"
-            art="dusk"
-            image={visionStudioBanner}
+            accentColor="#8b5cf6"
             files={PROJECTS_DATA['vision-studio'].files}
             width={340}
             open={activeProjectId === 'vision-studio'}
@@ -369,31 +365,52 @@ export function Projects() {
           className="mt-12 rounded-2xl border border-white/[0.08] bg-[#121214]/90 p-6 md:p-10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_20px_50px_-10px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
         >
           {/* Header Row */}
-          <div className="flex flex-col gap-4 border-b border-line/60 pb-8 md:flex-row md:items-start md:justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-xs uppercase tracking-[0.25em] text-signal">
-                  {activeProject.badge}
-                </span>
-                {selectedFile && (
-                  <span className="rounded-full border border-signal/40 bg-signal/10 px-2.5 py-0.5 font-mono text-[10px] text-signal">
-                    Viewing: {selectedFile.name}
-                  </span>
-                )}
+          <div className="flex flex-col gap-6 border-b border-line/60 pb-8 lg:flex-row lg:items-start lg:justify-between">
+            <div className="flex flex-col sm:flex-row items-start gap-6">
+              {/* Flagship Brand Logo Emblem — Beautifully Presented in Dossier Block */}
+              <div
+                className="relative shrink-0 overflow-hidden rounded-2xl border p-2.5 shadow-2xl backdrop-blur-xl transition-all"
+                style={{
+                  backgroundColor: '#0c0d12',
+                  borderColor: `${activeProject.accentColor}40`,
+                  boxShadow: `0 12px 32px -8px ${activeProject.accentColor}30, inset 0 1px 0 0 rgba(255,255,255,0.18)`,
+                }}
+              >
+                <img
+                  src={activeProject.image}
+                  alt={`${activeProject.title} Brand Logo`}
+                  className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 rounded-xl object-contain"
+                />
               </div>
-              <h3 className="mt-2 font-geist text-3xl font-extrabold tracking-[-0.03em] text-ash md:text-4xl">
-                {activeProject.title}
-              </h3>
-              <p className="mt-1 font-mono text-xs uppercase tracking-widest text-dim md:text-sm">
-                {activeProject.subtitle}
-              </p>
-              <p className="mt-3 max-w-3xl text-sm leading-relaxed tracking-[-0.005em] text-dim md:text-base">
-                {activeProject.tagline}
-              </p>
+
+              <div>
+                <div className="flex items-center gap-3">
+                  <span
+                    className="font-mono text-xs uppercase tracking-[0.25em] font-semibold"
+                    style={{ color: activeProject.accentColor }}
+                  >
+                    {activeProject.badge}
+                  </span>
+                  {selectedFile && (
+                    <span className="rounded-full border border-signal/40 bg-signal/10 px-2.5 py-0.5 font-mono text-[10px] text-signal">
+                      Viewing: {selectedFile.name}
+                    </span>
+                  )}
+                </div>
+                <h3 className="mt-2 font-geist text-3xl font-extrabold tracking-[-0.03em] text-ash md:text-4xl">
+                  {activeProject.title}
+                </h3>
+                <p className="mt-1 font-mono text-xs uppercase tracking-widest text-dim md:text-sm">
+                  {activeProject.subtitle}
+                </p>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed tracking-[-0.005em] text-dim md:text-base">
+                  {activeProject.tagline}
+                </p>
+              </div>
             </div>
 
             {/* Quick Action Buttons with Instant Tactile Feedback */}
-            <div className="flex flex-wrap items-center gap-3 md:shrink-0">
+            <div className="flex flex-wrap items-center gap-3 lg:shrink-0 pt-2 lg:pt-0">
               <motion.a
                 href="https://www.linkedin.com/in/adityarasal007"
                 target="_blank"
