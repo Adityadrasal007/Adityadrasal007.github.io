@@ -3,16 +3,16 @@ import * as CANNON from 'cannon-es';
 /**
  * High-Performance Toy Car Physics Engine (Cannon-es)
  *
- * Replicates Bruno Simon's iconic RC vehicle physics:
+ * Configured for the Personal Universe:
+ * - ANANTAM Live Concert Stage & Crowd Arena
+ * - TEDx Amphitheater & Red Dot Stage Platform
+ * - Mountain Climbing Rocky Peak & Offroad Ramps with Tumble Boulders
  * - RaycastVehicle with realistic spring suspension & tire friction
- * - Destructible physical objects (wooden blocks spelling ADITYA, bowling pins, ramps)
- * - Anti-flip center-of-mass stabilization
- * - Full collision detection for interactive portfolio parking zones
  */
 
 export function createVehiclePhysics() {
   const world = new CANNON.World();
-  world.gravity.set(0, -9.82 * 1.5, 0); // Slightly punchier gravity for toy-car feel
+  world.gravity.set(0, -9.82 * 1.5, 0); // Punchy toy-car gravity
   world.broadphase = new CANNON.SAPBroadphase(world);
   world.allowSleep = true;
 
@@ -29,7 +29,7 @@ export function createVehiclePhysics() {
   world.addContactMaterial(wheelGroundContact);
 
   const obstacleContact = new CANNON.ContactMaterial(groundMaterial, obstacleMaterial, {
-    friction: 0.4,
+    friction: 0.45,
     restitution: 0.2,
   });
   world.addContactMaterial(obstacleContact);
@@ -43,24 +43,24 @@ export function createVehiclePhysics() {
   groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
   world.addBody(groundBody);
 
-  // Playground boundary walls to keep car on track
-  const arenaHalf = 45; // 90x90m arena
-  const wallShapeX = new CANNON.Box(new CANNON.Vec3(arenaHalf, 3, 1));
-  const wallShapeZ = new CANNON.Box(new CANNON.Vec3(1, 3, arenaHalf));
+  // Playground boundary walls (90x90m arena)
+  const arenaHalf = 45;
+  const wallShapeX = new CANNON.Box(new CANNON.Vec3(arenaHalf, 4, 1));
+  const wallShapeZ = new CANNON.Box(new CANNON.Vec3(1, 4, arenaHalf));
 
-  const northWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(0, 3, -arenaHalf) });
+  const northWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(0, 4, -arenaHalf) });
   northWall.addShape(wallShapeX);
   world.addBody(northWall);
 
-  const southWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(0, 3, arenaHalf) });
+  const southWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(0, 4, arenaHalf) });
   southWall.addShape(wallShapeX);
   world.addBody(southWall);
 
-  const eastWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(arenaHalf, 3, 0) });
+  const eastWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(arenaHalf, 4, 0) });
   eastWall.addShape(wallShapeZ);
   world.addBody(eastWall);
 
-  const westWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(-arenaHalf, 3, 0) });
+  const westWall = new CANNON.Body({ type: CANNON.Body.STATIC, position: new CANNON.Vec3(-arenaHalf, 4, 0) });
   westWall.addShape(wallShapeZ);
   world.addBody(westWall);
 
@@ -102,7 +102,7 @@ export function createVehiclePhysics() {
     useCustomSlidingRotationalSpeed: true,
   };
 
-  // Add 4 wheels: Front Left, Front Right, Rear Left, Rear Right
+  // Add 4 wheels
   const wheelX = 0.95;
   const wheelZFront = 1.35;
   const wheelZRear = -1.35;
@@ -126,12 +126,12 @@ export function createVehiclePhysics() {
 
   vehicle.addToWorld(world);
 
-  // Wheel bodies for collision representation
+  // Wheel kinematic collision representations
   const wheelBodies = [];
   const wheelShape = new CANNON.Cylinder(0.42, 0.42, 0.32, 20);
   vehicle.wheelInfos.forEach(() => {
     const cylinderBody = new CANNON.Body({ mass: 0, material: wheelMaterial, type: CANNON.Body.KINEMATIC });
-    cylinderBody.collisionFilterGroup = 0; // Don't collide with chassis
+    cylinderBody.collisionFilterGroup = 0;
     const q = new CANNON.Quaternion();
     q.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.PI / 2);
     cylinderBody.addShape(wheelShape, new CANNON.Vec3(), q);
@@ -139,7 +139,7 @@ export function createVehiclePhysics() {
     world.addBody(cylinderBody);
   });
 
-  // 4. Destructible Physics Props & Obstacles (Like Bruno Simon's Blocks & Dominoes)
+  // 4. Destructible Physics Props & Obstacles
   const dynamicObstacles = [];
 
   function addPhysicsBox(x, y, z, w, h, d, mass = 12, label = 'box') {
@@ -158,51 +158,77 @@ export function createVehiclePhysics() {
     return body;
   }
 
-  // A-D-I-T-Y-A Giant Destructible Letter Towers at Spawn
+  // A-D-I-T-Y-A Giant Letter Towers at Spawn
   const letters = ['A', 'D', 'I', 'T', 'Y', 'A'];
   letters.forEach((letter, i) => {
     const bx = -10 + i * 4.0;
     const bz = -8;
-    // Stack 2 blocks per letter
     addPhysicsBox(bx, 0.75, bz, 1.5, 1.5, 1.5, 10, `letter_${letter}`);
     addPhysicsBox(bx, 2.3, bz, 1.4, 1.4, 1.4, 8, `letter_top_${letter}`);
   });
 
-  // Bowling Pin Triangle (10 pins) for satisfaction
-  const pinX = 14;
-  const pinZ = -14;
-  let pinCount = 0;
-  for (let r = 0; r < 4; r++) {
-    for (let c = 0; c <= r; c++) {
-      const px = pinX + (c - r / 2) * 1.2;
-      const pz = pinZ - r * 1.3;
-      addPhysicsBox(px, 0.8, pz, 0.6, 1.6, 0.6, 4, `pin_${pinCount++}`);
-    }
-  }
+  // Mountain Climbing Tumble Boulders (Pushable rocks on the offroad trail!)
+  const mountainBoulders = [
+    { x: 21, y: 1.0, z: 16, r: 0.9, m: 25 },
+    { x: 23, y: 1.4, z: 19, r: 0.75, m: 18 },
+    { x: 26, y: 2.1, z: 22, r: 0.85, m: 22 },
+    { x: 20, y: 0.8, z: 24, r: 0.65, m: 14 },
+    { x: 27, y: 2.6, z: 18, r: 1.1, m: 35 },
+  ];
 
-  // 5. Jump Ramps
-  function addRamp(x, z, rotY = 0) {
-    const rampBody = new CANNON.Body({
-      type: CANNON.Body.STATIC,
-      material: groundMaterial,
+  mountainBoulders.forEach((b, i) => {
+    const sphereBody = new CANNON.Body({
+      mass: b.m,
+      shape: new CANNON.Sphere(b.r),
+      material: obstacleMaterial,
+      linearDamping: 0.3,
+      angularDamping: 0.4,
     });
-    // Angled box ramp
-    const rampShape = new CANNON.Box(new CANNON.Vec3(2.5, 0.35, 3.5));
-    const q1 = new CANNON.Quaternion();
-    q1.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -0.22); // ~12 degree incline
-    const q2 = new CANNON.Quaternion();
-    q2.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), rotY);
-    q2.mult(q1, q1);
-    rampBody.addShape(rampShape, new CANNON.Vec3(0, 0.5, 0), q1);
-    rampBody.position.set(x, 0, z);
+    sphereBody.position.set(b.x, b.y, b.z);
+    sphereBody.label = `boulder_${i}`;
+    world.addBody(sphereBody);
+    dynamicObstacles.push({ body: sphereBody, size: [b.r * 2, b.r * 2, b.r * 2], label: `boulder_${i}` });
+  });
+
+  // 5. Section Stage Platforms & Ramps
+
+  // A. ANANTAM Concert Stage Static Platform (-24, 0.75, -20)
+  const anantamStage = new CANNON.Body({ type: CANNON.Body.STATIC, material: groundMaterial });
+  anantamStage.addShape(new CANNON.Box(new CANNON.Vec3(7.5, 0.75, 4.5)));
+  anantamStage.position.set(-24, 0.75, -20);
+  world.addBody(anantamStage);
+
+  // ANANTAM Stage Access Ramp (so the car can drive onto the concert stage!)
+  function addRamp(x, y, z, w, h, d, rotX = 0, rotY = 0, rotZ = 0) {
+    const rampBody = new CANNON.Body({ type: CANNON.Body.STATIC, material: groundMaterial });
+    const rampShape = new CANNON.Box(new CANNON.Vec3(w / 2, h / 2, d / 2));
+    const q = new CANNON.Quaternion();
+    const qx = new CANNON.Quaternion();
+    const qy = new CANNON.Quaternion();
+    qx.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), rotX);
+    qy.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), rotY);
+    qy.mult(qx, q);
+    rampBody.addShape(rampShape, new CANNON.Vec3(), q);
+    rampBody.position.set(x, y, z);
     world.addBody(rampBody);
   }
 
-  addRamp(0, -22, 0); // Hero highway launch ramp
-  addRamp(20, 10, -Math.PI / 4); // Hobbies arena ramp
-  addRamp(-20, 15, Math.PI / 4); // Hackathons ramp
+  // Ramp onto Anantam stage
+  addRamp(-24, 0.4, -14.5, 4.0, 0.3, 5.0, 0.16, 0);
 
-  // Reset function to flip car upright
+  // B. TEDx Amphitheater Stage Platform (24, 0.5, -20)
+  const tedxStage = new CANNON.Body({ type: CANNON.Body.STATIC, material: groundMaterial });
+  tedxStage.addShape(new CANNON.Box(new CANNON.Vec3(6.5, 0.5, 4.0)));
+  tedxStage.position.set(24, 0.5, -20);
+  world.addBody(tedxStage);
+
+  // C. Mountain Climbing Offroad Terrain Ascent (24, y, 20)
+  // Stepped rocky terrain ramps leading to summit
+  addRamp(24, 0.6, 14, 5.5, 0.4, 6.0, -0.22, 0); // Climb segment 1
+  addRamp(24, 1.6, 18, 5.0, 0.4, 6.0, -0.25, 0); // Climb segment 2
+  addRamp(24, 2.5, 23, 6.0, 0.5, 6.0, 0, 0);     // Summit Flat Peak
+
+  // Reset Car function
   function resetCar() {
     chassisBody.position.set(0, 1.5, 0);
     chassisBody.quaternion.set(0, 0, 0, 1);
@@ -219,4 +245,3 @@ export function createVehiclePhysics() {
     resetCar,
   };
 }
-

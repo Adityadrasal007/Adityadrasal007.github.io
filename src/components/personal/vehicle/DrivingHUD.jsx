@@ -134,6 +134,21 @@ export function DrivingHUD({
 
           {/* Quick Context Actions */}
           <div className="mt-4 flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">
+            {activeZone.id === 'anantam' && (
+              <span className="inline-flex items-center gap-1.5 rounded-xl border border-pink-500/40 bg-pink-500/15 px-3 py-1.5 font-mono text-xs text-pink-300">
+                🎪 Event Lead • 8,000+ Attendees
+              </span>
+            )}
+            {activeZone.id === 'tedx' && (
+              <span className="inline-flex items-center gap-1.5 rounded-xl border border-red-500/40 bg-red-500/15 px-3 py-1.5 font-mono text-xs text-red-300">
+                🎤 TEDx Curator & Speaker Coach
+              </span>
+            )}
+            {activeZone.id === 'mountain' && (
+              <span className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 font-mono text-xs text-emerald-300">
+                🏔️ Summit Trekker • Sahyadri & Himalayas
+              </span>
+            )}
             {activeZone.id === 'contact' ? (
               <>
                 <a
@@ -166,9 +181,9 @@ export function DrivingHUD({
             ) : (
               <Link
                 to="/tech"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-amber-400/40 bg-amber-400/15 px-3 py-1.5 font-mono text-xs text-amber-300 hover:bg-amber-400 hover:text-black transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 font-mono text-xs text-ash hover:border-amber-400/50 hover:text-white transition-colors"
               >
-                Inspect Tech Specs
+                Inspect Tech Universe
                 <ExternalLink className="h-3.5 w-3.5" />
               </Link>
             )}

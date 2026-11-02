@@ -15,51 +15,51 @@ export const PLAYGROUND_ZONES = [
     id: 'hero',
     name: 'Spawn Point',
     title: 'Aditya Rasal',
-    subtitle: 'Full-Stack & Edge-AI Engineer',
-    description: 'Welcome to the 3D playground. Drive around to explore my journey, hackathons, and projects!',
+    subtitle: 'The Personal Universe',
+    description: 'Welcome to my 3D universe! Drive your RC buggy around to explore my major leadership events, mentorship stages, and extreme outdoor passions.',
     center: [0, 0],
     radius: 7,
     color: '#f59e0b',
   },
   {
-    id: 'milestones',
-    name: 'Career Runway',
-    title: 'Engineering Milestones',
-    subtitle: 'Core Technical Evolution',
-    description: 'Years of building production-grade computer vision, edge AI pipelines, and distributed backends.',
-    center: [0, -24],
-    radius: 9,
-    color: '#06b6d4',
+    id: 'anantam',
+    name: 'Live Concert Stage',
+    title: 'ANANTAM Cultural Festival',
+    subtitle: 'Event Lead & Festival Director',
+    description: 'Directed our university premier cultural mega-fest. Led 200+ organizing crew, multi-artist live concerts, high-wattage audio-visual rigging, and safe crowd operations for 8,000+ energized students.',
+    center: [-24, -20],
+    radius: 11,
+    color: '#ec4899',
   },
   {
-    id: 'hackathons',
-    name: 'Hackathons & Outposts',
-    title: 'Competitive Engineering',
-    subtitle: 'NASA Space Apps · Vibenity · GDG',
-    description: 'Championship-grade hackathon builds, real-time computer vision systems, and community leadership.',
-    center: [-24, 12],
-    radius: 9,
-    color: '#8b5cf6',
+    id: 'tedx',
+    name: 'University Amphitheater',
+    title: 'TEDx Event',
+    subtitle: 'Event Mentor & Stage Curator',
+    description: 'Curated and mentored thought leaders on the iconic red dot. Coached 12+ national speakers on storytelling, managed stage acoustics & lighting direction, and fostered intellectual curiosity across campus.',
+    center: [24, -20],
+    radius: 11,
+    color: '#ef4444',
   },
   {
-    id: 'hobbies',
-    name: 'Hobbies Grove',
-    title: 'Life, Konkan & Hobbies',
-    subtitle: 'Turtle Pond · Monsoon Rain · Campfire',
-    description: 'Beyond code: spending rainy days in Konkan, caring for turtles, DIY tinkering, and warm hot chocolate.',
-    center: [24, 12],
-    radius: 9,
+    id: 'mountain',
+    name: 'Mountain Peak & Trail',
+    title: 'Trekking & Offroad Adventure',
+    subtitle: 'High-Altitude Mountaineer & 4x4 Enthusiast',
+    description: 'Scaling rugged Sahyadri cliffs and high-altitude Himalayan passes. Testing endurance, high-stakes decision making, and mental grit across treacherous weather and offroad terrains.',
+    center: [24, 20],
+    radius: 11,
     color: '#10b981',
   },
   {
     id: 'contact',
     name: 'The Finish Line',
-    title: 'Get In Touch',
-    subtitle: 'Open for High-Impact Roles',
-    description: 'Park in the social bays or download my updated resume below.',
+    title: 'Connect with Aditya',
+    subtitle: 'Open for Bold Challenges & Leadership',
+    description: 'Park in the social stalls to explore my LinkedIn, GitHub, or download my resume. Let’s build something extraordinary together!',
     center: [0, 32],
     radius: 8,
-    color: '#ef4444',
+    color: '#3b82f6',
   },
 ];
 
@@ -125,6 +125,26 @@ export function createWorldPlayground(scene, dynamicObstacles) {
       );
       ring.position.y = h * 0.22;
       mesh.add(ring);
+    } else if (item.label.startsWith('boulder')) {
+      // Mountain Tumble Boulder (Dynamic rugged rock!)
+      const rockRadius = w * 0.5;
+      const rockGeo = new THREE.DodecahedronGeometry(rockRadius, 1);
+      const pos = rockGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const vx = pos.getX(i);
+        const vy = pos.getY(i);
+        const vz = pos.getZ(i);
+        const noise = 1 + Math.sin(vx * 7 + vz * 3 + i) * 0.18;
+        pos.setXYZ(i, vx * noise, vy * noise, vz * noise);
+      }
+      rockGeo.computeVertexNormals();
+      const rockMat = new THREE.MeshStandardMaterial({
+        color: 0x64748b, // Mountain granite slate
+        roughness: 0.9,
+        metalness: 0.1,
+        flatShading: true,
+      });
+      mesh = new THREE.Mesh(rockGeo, rockMat);
     } else {
       // Colorful wooden toy block
       const color = blockColors[idx % blockColors.length];
@@ -177,8 +197,6 @@ export function createWorldPlayground(scene, dynamicObstacles) {
   }
 
   createVisualRamp(0, -22, 0);
-  createVisualRamp(20, 10, -Math.PI / 4);
-  createVisualRamp(-20, 15, Math.PI / 4);
 
   // 5. Zone Pavilions & Floating Floor Holograms
   PLAYGROUND_ZONES.forEach((zone) => {
