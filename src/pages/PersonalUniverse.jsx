@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Maximize2, Minimize2, Car, Compass } from 'lucide-react';
+import { ArrowLeft, Maximize2, Minimize2, Car, RefreshCw, Wrench, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function PersonalUniverse() {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -17,14 +17,62 @@ export function PersonalUniverse() {
     }
   };
 
+  const sendKey = (key, code, isDown = true) => {
+    try {
+      iframeRef.current?.contentWindow?.dispatchEvent(
+        new KeyboardEvent(isDown ? 'keydown' : 'keyup', {
+          key,
+          code,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+    } catch (err) {}
+  };
+
+  // Listen for engine ready
+  useEffect(() => {
+    const handleMessage = (e) => {
+      if (e.data?.type === 'FOLIO_READY') {
+        setIsIframeLoaded(true);
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    const safetyTimeout = setTimeout(() => setIsIframeLoaded(true), 4500);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(safetyTimeout);
+    };
+  }, []);
+
+  // Keyboard Event Forwarding to Iframe
   useEffect(() => {
     const focusIframe = () => {
       iframeRef.current?.focus();
       iframeRef.current?.contentWindow?.focus();
     };
 
+    const handleKeyDown = (e) => {
+      // Avoid forwarding if user is focused inside an input
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      sendKey(e.key, e.code, true);
+    };
+
+    const handleKeyUp = (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      sendKey(e.key, e.code, false);
+    };
+
     window.addEventListener('click', focusIframe);
-    return () => window.removeEventListener('click', focusIframe);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('click', focusIframe);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
   }, []);
 
   return (
@@ -54,6 +102,81 @@ export function PersonalUniverse() {
         </button>
       </div>
 
+      {/* Floating Garage & Respawn Quick Bar */}
+      <div className="absolute top-4 right-4 z-50 flex items-center gap-2 pointer-events-auto">
+        <button
+          type="button"
+          onClick={() => {
+            sendKey('g', 'KeyG', true);
+            setTimeout(() => sendKey('g', 'KeyG', false), 100);
+          }}
+          className="inline-flex items-center gap-1.5 rounded-full border border-fuchsia-500/40 bg-black/80 px-3.5 py-1.5 font-mono text-xs font-bold text-fuchsia-300 shadow-2xl backdrop-blur-2xl transition-all hover:border-fuchsia-400 hover:bg-fuchsia-500/20 cursor-pointer"
+        >
+          <Wrench className="h-3.5 w-3.5 text-fuchsia-400" />
+          <span>Garage [G]</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            sendKey('r', 'KeyR', true);
+            setTimeout(() => sendKey('r', 'KeyR', false), 100);
+          }}
+          className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 bg-black/80 px-3.5 py-1.5 font-mono text-xs font-bold text-cyan-300 shadow-2xl backdrop-blur-2xl transition-all hover:border-cyan-400 hover:bg-cyan-500/20 cursor-pointer"
+        >
+          <RefreshCw className="h-3.5 w-3.5 text-cyan-400" />
+          <span>Reset [R]</span>
+        </button>
+      </div>
+
+      {/* On-Screen Touch / Mouse Driving Controls (Bottom Left & Right) */}
+      <div className="absolute bottom-5 left-5 z-40 hidden md:flex items-center gap-2 pointer-events-auto bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-2 text-white/80 text-xs font-mono shadow-2xl">
+        <div className="flex flex-col items-center gap-1">
+          <button
+            onPointerDown={() => sendKey('w', 'KeyW', true)}
+            onPointerUp={() => sendKey('w', 'KeyW', false)}
+            onPointerLeave={() => sendKey('w', 'KeyW', false)}
+            className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center hover:bg-white/20 active:bg-fuchsia-500 transition-colors"
+            title="Accelerate (W)"
+          >
+            <ChevronUp className="w-5 h-5 text-white" />
+          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onPointerDown={() => sendKey('a', 'KeyA', true)}
+              onPointerUp={() => sendKey('a', 'KeyA', false)}
+              onPointerLeave={() => sendKey('a', 'KeyA', false)}
+              className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center hover:bg-white/20 active:bg-fuchsia-500 transition-colors"
+              title="Steer Left (A)"
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </button>
+            <button
+              onPointerDown={() => sendKey('s', 'KeyS', true)}
+              onPointerUp={() => sendKey('s', 'KeyS', false)}
+              onPointerLeave={() => sendKey('s', 'KeyS', false)}
+              className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center hover:bg-white/20 active:bg-fuchsia-500 transition-colors"
+              title="Reverse (S)"
+            >
+              <ChevronDown className="w-5 h-5 text-white" />
+            </button>
+            <button
+              onPointerDown={() => sendKey('d', 'KeyD', true)}
+              onPointerUp={() => sendKey('d', 'KeyD', false)}
+              onPointerLeave={() => sendKey('d', 'KeyD', false)}
+              className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center hover:bg-white/20 active:bg-fuchsia-500 transition-colors"
+              title="Steer Right (D)"
+            >
+              <ChevronRight className="w-5 h-5 text-white" />
+            </button>
+          </div>
+        </div>
+        <div className="ml-2 pl-3 border-l border-white/10 flex flex-col gap-1 text-[11px] text-white/60">
+          <div><span className="text-white font-bold">WASD</span> or <span className="text-white font-bold">ARROWS</span> to Drive</div>
+          <div><span className="text-cyan-400 font-bold">SPACE</span> for Handbrake Drift</div>
+          <div><span className="text-fuchsia-400 font-bold">[G]</span> Garage // <span className="text-amber-400 font-bold">[V]</span> Free Camera</div>
+        </div>
+      </div>
+
       {/* Loading Overlay while assets download */}
       {!isIframeLoaded && (
         <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#130f17] text-white transition-opacity duration-700 pointer-events-none">
@@ -69,10 +192,10 @@ export function PersonalUniverse() {
               ADITYA RASAL // 3D FOLIO
             </div>
             <h2 className="text-xl font-bold tracking-tight text-white mb-2">
-              Loading 3D Universe...
+              Loading Aditya's World...
             </h2>
             <p className="text-xs text-white/60 mb-6">
-              Spinning up Mercedes-AMG G 63, Rapier 3D physics, and high-fidelity shaders.
+              Mercedes-AMG G 63, Racing Superbike, ANANTAM Concert Stage, and 3D Memory Wheel spinning up.
             </p>
 
             {/* Quick Controls Cheat Sheet */}
@@ -111,7 +234,7 @@ export function PersonalUniverse() {
             setIsIframeLoaded(true);
             iframeRef.current?.focus();
             iframeRef.current?.contentWindow?.focus();
-          }, 1200);
+          }, 1000);
         }}
       />
     </div>
