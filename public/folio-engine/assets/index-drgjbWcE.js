@@ -94209,14 +94209,15 @@ https://github.com/browserify/crypto-browserify`);
       this.text = {};
       const e = 1.3, r = new PlaneGeometry(2 * e, 1 * e);
       this.text.textures = /* @__PURE__ */ new Map(), this.text.updateTexture = async () => {
+        var _a2, _b;
         let a = "mouseKeyboard";
         this.game.inputs.mode === Inputs.MODE_GAMEPAD ? this.game.inputs.gamepad.type === "xbox" ? a = "gamepadXbox" : a = "gamepadPlaystation" : this.game.inputs.mode === Inputs.MODE_TOUCH && (a = "touch");
-        let h = this.text.textures.get(a);
+        let h = (_b = (_a2 = this.text) == null ? void 0 : _a2.textures) == null ? void 0 : _b.get(a);
         if (h) s.outputNode = Fn$1(() => (texture$1(h, vec2$1(uv$2().x, uv$2().y.oneMinus())).r.lessThan(0.5).discard(), vec4$1(1)))(), s.needsUpdate = true;
         else {
           const c = this.game.resourcesLoader.getLoader("textureKtx"), d = `intro/${a}Label.ktx`;
           c.load(d, (f) => {
-            this.text.textures.set(a, f), s.outputNode = Fn$1(() => (texture$1(f, vec2$1(uv$2().x, uv$2().y.oneMinus())).r.lessThan(0.5).discard(), vec4$1(1)))(), s.needsUpdate = true, o.visible = true;
+            !this.text || !this.text.textures || (this.text.textures.set(a, f), s.outputNode = Fn$1(() => (texture$1(f, vec2$1(uv$2().x, uv$2().y.oneMinus())).r.lessThan(0.5).discard(), vec4$1(1)))(), s.needsUpdate = true, o.visible = true);
           });
         }
       }, this.text.updateTexture();
@@ -94291,20 +94292,22 @@ https://github.com/browserify/crypto-browserify`);
           this.label.scale.setScalar(r.scale);
         },
         onComplete: () => {
-          this.text.mesh.removeFromParent(), this.soundButton.mesh.removeFromParent(), this.game.rayCursor.removeIntersect(this.soundButton.intersect);
+          var _a2, _b, _c;
+          ((_a2 = this.text) == null ? void 0 : _a2.mesh) && this.text.mesh.removeFromParent(), ((_b = this.soundButton) == null ? void 0 : _b.mesh) && this.soundButton.mesh.removeFromParent(), ((_c = this.soundButton) == null ? void 0 : _c.intersect) && this.game.rayCursor.removeIntersect(this.soundButton.intersect);
         }
       });
     }
     updateProgress(e) {
-      this.circle.progress = e;
+      this.circle && (this.circle.progress = e);
     }
     update() {
-      this.circle.smoothedProgress.value += (this.circle.progress - this.circle.smoothedProgress.value) * this.game.ticker.delta * 10;
+      this.circle && this.circle.smoothedProgress && (this.circle.smoothedProgress.value += (this.circle.progress - this.circle.smoothedProgress.value) * this.game.ticker.delta * 10);
     }
     destroy() {
-      this.label.removeFromParent(), this.circle.mesh.geometry.dispose(), this.soundButton.mesh.geometry.dispose(), this.text.mesh.geometry.dispose(), this.circle.mesh.material.dispose(), this.soundButton.mesh.material.dispose(), this.text.mesh.material.dispose(), this.game.resources.soundTexture.dispose(), this.text.textures.forEach((e, r) => {
+      var _a2, _b, _c, _d, _e, _f, _g, _h, _i2, _j, _k, _l, _m, _n, _o, _p;
+      this.label && this.label.removeFromParent(), ((_b = (_a2 = this.circle) == null ? void 0 : _a2.mesh) == null ? void 0 : _b.geometry) && this.circle.mesh.geometry.dispose(), ((_d = (_c = this.soundButton) == null ? void 0 : _c.mesh) == null ? void 0 : _d.geometry) && this.soundButton.mesh.geometry.dispose(), ((_f = (_e = this.text) == null ? void 0 : _e.mesh) == null ? void 0 : _f.geometry) && this.text.mesh.geometry.dispose(), ((_h = (_g = this.circle) == null ? void 0 : _g.mesh) == null ? void 0 : _h.material) && this.circle.mesh.material.dispose(), ((_j = (_i2 = this.soundButton) == null ? void 0 : _i2.mesh) == null ? void 0 : _j.material) && this.soundButton.mesh.material.dispose(), ((_l = (_k = this.text) == null ? void 0 : _k.mesh) == null ? void 0 : _l.material) && this.text.mesh.material.dispose(), ((_n = (_m = this.game) == null ? void 0 : _m.resources) == null ? void 0 : _n.soundTexture) && this.game.resources.soundTexture.dispose(), ((_o = this.text) == null ? void 0 : _o.textures) && this.text.textures.forEach((e, r) => {
         e.dispose();
-      }), this.game.ticker.events.off("tick", this.update), this.game.inputs.gamepad.events.off("typeChange", this.text.updateTexture), this.game.inputs.events.off("modeChange", this.text.updateTexture);
+      }), this.game.ticker.events.off("tick", this.update), ((_p = this.text) == null ? void 0 : _p.updateTexture) && (this.game.inputs.gamepad.events.off("typeChange", this.text.updateTexture), this.game.inputs.events.off("modeChange", this.text.updateTexture));
     }
   }
   class PoleLights {
@@ -108848,7 +108851,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-3dKxqX0o.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BVcFn2UZ.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -109189,11 +109192,13 @@ ${e.tab}if ( ${m} ) {
       "\u255D"
     ].includes(e) ? currentStyle !== "pipe" && (currentStyle = "pipe", finalText += "%c", finalStyles.push(stylesSet.pipe)) : currentStyle !== "letter" && (currentStyle = "letter", finalText += "%c", finalStyles.push(stylesSet.letter)), finalText += e;
   }
-  const consoleLog = () => {
-    console.log(finalText, ...finalStyles);
-  };
+  const consoleLog = [
+    finalText,
+    ...finalStyles
+  ];
   console.log(...consoleLog);
-  new Game();
+  const game$1 = new Game();
+  window.game = game$1;
 })();
 export {
   Buffer as B,

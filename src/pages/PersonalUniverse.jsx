@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Maximize2, Minimize2 } from 'lucide-react';
 
 export function PersonalUniverse() {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const iframeRef = useRef(null);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -14,6 +15,16 @@ export function PersonalUniverse() {
       setIsFullscreen(false);
     }
   };
+
+  useEffect(() => {
+    const focusIframe = () => {
+      iframeRef.current?.focus();
+      iframeRef.current?.contentWindow?.focus();
+    };
+
+    window.addEventListener('click', focusIframe);
+    return () => window.removeEventListener('click', focusIframe);
+  }, []);
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#0c0d14] select-none font-geist">
@@ -44,11 +55,16 @@ export function PersonalUniverse() {
 
       {/* Folio-2025 WebGPU / Rapier 3D Native Engine Frame */}
       <iframe
+        ref={iframeRef}
         src="./folio-engine/index.html"
         title="Aditya Rasal 3D Interactive Universe"
         className="w-full h-full border-0 outline-none"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
+        onLoad={() => {
+          iframeRef.current?.focus();
+          iframeRef.current?.contentWindow?.focus();
+        }}
       />
     </div>
   );
