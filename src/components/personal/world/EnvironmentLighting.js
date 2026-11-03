@@ -293,3 +293,4 @@ export function createEnvironmentLighting(scene) {
     update,
   };
 }
+
