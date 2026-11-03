@@ -49,7 +49,7 @@
 
         gtag('config', '');
     </script>
-  <script type="module" crossorigin src="./assets/index-CmvM0iY6.js"></script>
+  <script type="module" crossorigin src="./assets/index-gcPToRVb.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-Di03QkGT.css">
 </head>
 <body>
@@ -97,6 +97,11 @@
                     <img class="map-icon" src="ui/map.svg" loading="lazy">
                 </div>
             </div>
+        </button>
+
+        <!-- Garage trigger -->
+        <button class="js-garage-trigger garage-trigger" title="Vehicle Garage (G)" style="position: fixed; top: 112px; right: 20px; z-index: 10; width: 44px; height: 44px; border-radius: 12px; background: rgba(18, 16, 26, 0.85); border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: transform 0.2s, background 0.2s;">
+            <div style="font-size: 1.35rem; line-height: 1;">🚙</div>
         </button>
 
         <!-- Menu -->
@@ -177,6 +182,7 @@
                             </div>
                         </div>
                     </button>
+
                 </div>
 
                 <div class="container">
@@ -915,6 +921,74 @@
                         <div style="margin-top: 1.5rem; display: flex; gap: 10px;">
                             <a href="https://instagram.com/aditya_rasal007" target="_blank" rel="noreferrer" class="button">View Adventures</a>
                             <a href="../#/tech" class="button">Tech Universe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Garage Modal -->
+            <div class="js-modal modal garage" data-name="garage">
+                <div class="container" style="max-width: 780px; width: 92vw;">
+                    <div class="content" style="padding: 2rem 2.5rem; text-align: left; background: rgba(18, 16, 26, 0.96); border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.14); box-shadow: 0 20px 50px rgba(0,0,0,0.65);">
+                        <button class="js-close close">
+                            <img class="icon is-default" src="ui/close.svg" loading="lazy">
+                            <span class="icon is-xbox">A</span>
+                        </button>
+
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 1rem;">
+                            <div>
+                                <h2 class="title" style="margin: 0; font-size: 1.8rem; color: #ffffff; letter-spacing: 0.02em;">🏁 VEHICLE GARAGE</h2>
+                                <p style="margin: 0.25rem 0 0; color: #a1a1aa; font-size: 0.9rem;">Select your machine & customize factory specifications</p>
+                            </div>
+                            <span style="background: rgba(234, 179, 8, 0.15); color: #facc15; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(234, 179, 8, 0.3);">HOTKEY: [G]</span>
+                        </div>
+
+                        <!-- Vehicle Grid -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                            
+                            <!-- Card 1: Mercedes-AMG G 63 -->
+                            <div class="js-card-gwagon" style="background: linear-gradient(135deg, rgba(30, 27, 46, 0.9), rgba(15, 13, 24, 0.95)); border: 2px solid #ec4899; border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                                <div style="position: absolute; top: -10px; right: 15px; background: #ec4899; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">Exact Replica</div>
+                                <div>
+                                    <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🚙</div>
+                                    <h3 style="margin: 0 0 0.35rem; font-size: 1.35rem; color: #ffffff;">Mercedes-AMG G 63</h3>
+                                    <div style="color: #ec4899; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.75rem;">G-Wagon 4.0L V8 Biturbo</div>
+                                    <p style="color: #cbd5e1; font-size: 0.85rem; line-height: 1.5; margin: 0 0 1rem;">
+                                        Monolith boxy architecture, Panamericana chrome vertical grille, signature round LED halo DRL headlights, top-fender amber turn signals, dual side-exit exhausts, and rear door spare tire cover.
+                                    </p>
+                                    
+                                    <!-- Color Swatches -->
+                                    <div style="margin-bottom: 1.2rem;">
+                                        <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem;">Paint Specification:</div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="js-garage-color" data-color="black" title="Obsidian Black Metallic" style="width: 26px; height: 26px; border-radius: 50%; background: #18181b; border: 2px solid #ffffff; cursor: pointer;"></button>
+                                            <button class="js-garage-color" data-color="matte" title="Magno Matte Black" style="width: 26px; height: 26px; border-radius: 50%; background: #3f3f46; border: 2px solid rgba(255,255,255,0.4); cursor: pointer;"></button>
+                                            <button class="js-garage-color" data-color="white" title="Polar White" style="width: 26px; height: 26px; border-radius: 50%; background: #f8fafc; border: 2px solid rgba(255,255,255,0.4); cursor: pointer;"></button>
+                                            <button class="js-garage-color" data-color="green" title="G-Manufaktur Olive Green" style="width: 26px; height: 26px; border-radius: 50%; background: #3f4f38; border: 2px solid rgba(255,255,255,0.4); cursor: pointer;"></button>
+                                            <button class="js-garage-color" data-color="yellow" title="AMG Solarbeam Yellow" style="width: 26px; height: 26px; border-radius: 50%; background: #eab308; border: 2px solid rgba(255,255,255,0.4); cursor: pointer;"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="js-garage-select-gwagon button" style="width: 100%; justify-content: center; background: #ec4899; color: #ffffff; font-weight: 700; cursor: pointer;">Drive Mercedes G-Wagon</button>
+                            </div>
+
+                            <!-- Card 2: Classic Dune Buggy -->
+                            <div class="js-card-buggy" style="background: linear-gradient(135deg, rgba(30, 27, 46, 0.7), rgba(15, 13, 24, 0.85)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div>
+                                    <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🏎️</div>
+                                    <h3 style="margin: 0 0 0.35rem; font-size: 1.35rem; color: #ffffff;">Classic Dune Buggy</h3>
+                                    <div style="color: #38bdf8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.75rem;">Agile Arcade RC Spec</div>
+                                    <p style="color: #cbd5e1; font-size: 0.85rem; line-height: 1.5; margin: 0 0 1rem;">
+                                        Lightweight tubular chassis, high-rebound bouncy suspensions, rear high-voltage energy cell, and arcade handling dynamics.
+                                    </p>
+                                </div>
+                                <button class="js-garage-select-buggy button" style="width: 100%; justify-content: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); cursor: pointer;">Drive Classic Buggy</button>
+                            </div>
+
+                        </div>
+
+                        <div style="font-size: 0.8rem; color: #71717a; text-align: center;">
+                            💡 Tip: You can switch vehicles anytime during gameplay by pressing <kbd style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; color: #ffffff;">G</kbd> on your keyboard or clicking the Garage icon in the menu.
                         </div>
                     </div>
                 </div>
