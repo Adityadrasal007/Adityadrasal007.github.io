@@ -58732,14 +58732,23 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       });
     }
     async setRenderer() {
-      return this.renderer = new WebGPURenderer({
+      const e = {
         canvas: this.game.canvasElement,
         powerPreference: "high-performance",
         forceWebGL: false,
         antialias: this.game.viewport.pixelRatio < 2
-      }), this.renderer.setSize(this.game.viewport.width, this.game.viewport.height), this.renderer.setPixelRatio(this.game.viewport.pixelRatio), this.renderer.sortObjects = false, this.renderer.domElement.classList.add("experience"), this.renderer.shadowMap.enabled = true, this.renderer.setOpaqueSort((e, r) => e.renderOrder - r.renderOrder), this.renderer.setTransparentSort((e, r) => e.renderOrder - r.renderOrder), location.hash.match(/inspector/i) && (this.renderer.inspector = new Inspector()), this.renderer.setAnimationLoop((e) => {
+      };
+      try {
+        this.renderer = new WebGPURenderer(e), this.applyRendererConfig(), await this.renderer.init();
+      } catch (r) {
+        console.warn("WebGPU init failed, smoothly falling back to WebGL:", r), e.forceWebGL = true, this.renderer = new WebGPURenderer(e), this.applyRendererConfig(), await this.renderer.init();
+      }
+      return this.renderer;
+    }
+    applyRendererConfig() {
+      this.renderer.setSize(this.game.viewport.width, this.game.viewport.height), this.renderer.setPixelRatio(this.game.viewport.pixelRatio), this.renderer.sortObjects = false, this.renderer.domElement.classList.add("experience"), this.renderer.shadowMap.enabled = true, this.renderer.setOpaqueSort((e, r) => e.renderOrder - r.renderOrder), this.renderer.setTransparentSort((e, r) => e.renderOrder - r.renderOrder), location.hash.match(/inspector/i) && (this.renderer.inspector = new Inspector()), this.renderer.setAnimationLoop((e) => {
         this.game.ticker.update(e);
-      }), this.renderer.init();
+      });
     }
     setPostprocessing() {
       this.postProcessing = new RenderPipeline(this.renderer);
@@ -93582,9 +93591,9 @@ THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
       this.game = Game.getInstance(), this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
         title: "\u{1F308} Trails",
         expanded: false
-      })), this.subdivisions = 32, this.texel = 1 / this.subdivisions, this.distanceThrottle = 0.4, this.emissiveMultiplier = uniform$1(5), this.fresnelOffset = uniform$1(0.25), this.decay = 0.2, this.items = [], this.setGeometry(), this.game.ticker.events.on("tick", () => {
+      })), this.subdivisions = 32, this.texel = 1 / this.subdivisions, this.distanceThrottle = 0.4, this.emissiveMultiplier = uniform$1(5), this.fresnelOffset = uniform$1(0.25), this.decay = 0.2, this.items = [], this.setGeometry(), this.tickCallback = () => {
         this.update();
-      }, 10), this.game.debug.active && (this.debugPanel.addBinding(this.emissiveMultiplier, "value", {
+      }, this.game.ticker.events.on("tick", this.tickCallback, 10), this.game.debug.active && (this.debugPanel.addBinding(this.emissiveMultiplier, "value", {
         label: "emissiveMultiplier",
         min: 0,
         max: 10,
@@ -93619,6 +93628,11 @@ THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
         return vec4$1(vec3$1(d), o.oneMinus().mul(a));
       })(), e.mesh = new Mesh$1(this.geometry, r), e.mesh.renderOrder = 1, e.mesh.frustumCulled = false, this.game.scene.add(e.mesh), this.items.push(e), e;
     }
+    destroy() {
+      this.game.ticker.events.off("tick", this.tickCallback);
+      for (const e of this.items) e.mesh && e.mesh.removeFromParent(), e.dataTexture && e.dataTexture.dispose();
+      this.items = [];
+    }
     update() {
       for (const e of this.items) {
         const r = e.dataTexture.source.data.data;
@@ -93644,8 +93658,8 @@ THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
       }, this.game.ticker.events.on("tick", this.tickCallback, 8);
     }
     destroy() {
-      this.game.ticker.events.off("tick", this.tickCallback), this.blinkers && (this.game.inputs.events.off("left", this.blinkers.leftCallback), this.game.inputs.events.off("right", this.blinkers.rightCallback)), this.parts.chassis && this.parts.chassis.removeFromParent(), this.antenna && this.antenna.head && this.antenna.head.removeFromParent(), this.boostTrails && (this.boostTrails.leftReference && this.boostTrails.leftReference.removeFromParent(), this.boostTrails.rightReference && this.boostTrails.rightReference.removeFromParent()), this.game.tracks.remove(this.mainGroundTrack);
-      for (const e of this.wheels.items) this.game.tracks.remove(e.groundTrack);
+      var _a2, _b, _c, _d, _e;
+      if (this.game.ticker.events.off("tick", this.tickCallback), this.blinkers && (this.game.inputs.events.off("left", this.blinkers.leftCallback), this.game.inputs.events.off("right", this.blinkers.rightCallback)), ((_a2 = this.parts) == null ? void 0 : _a2.chassis) && this.parts.chassis.removeFromParent(), this.antenna && this.antenna.head && this.antenna.head.removeFromParent(), ((_b = this.boostTrails) == null ? void 0 : _b.instance) && this.boostTrails.instance.destroy(), ((_c = this.boostTrails) == null ? void 0 : _c.leftReference) && this.boostTrails.leftReference.removeFromParent(), ((_d = this.boostTrails) == null ? void 0 : _d.rightReference) && this.boostTrails.rightReference.removeFromParent(), this.mainGroundTrack && this.game.tracks.remove(this.mainGroundTrack), (_e = this.wheels) == null ? void 0 : _e.items) for (const e of this.wheels.items) e.groundTrack && this.game.tracks.remove(e.groundTrack), e.container && e.container.removeFromParent();
     }
     setParts() {
       this.parts = {};
@@ -93769,7 +93783,11 @@ THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
       });
     }
     setAntenna() {
-      this.parts.antenna && (this.antenna = {}, this.antenna.target = new Vector3$1(0, 2, 0), this.antenna.target = new Vector3$1(0, 2, 0), this.antenna.object = this.parts.antenna, this.antenna.head = this.game.resources.vehicle.scene.getObjectByName("antennaHead"), this.antenna.headAxle = this.antenna.head.children[0], this.antenna.headReference = this.antenna.object.getObjectByName("antennaHeadReference"), this.game.materials.updateObject(this.antenna.head), this.game.scene.add(this.antenna.head));
+      var _a2, _b, _c, _d, _e;
+      if (!this.parts.antenna) return;
+      this.antenna = {}, this.antenna.target = new Vector3$1(0, 2, 0), this.antenna.target = new Vector3$1(0, 2, 0), this.antenna.object = this.parts.antenna;
+      const e = this.model.getObjectByName("antennaHead") || ((_b = (_a2 = this.game.resources) == null ? void 0 : _a2.vehicleCleanScene) == null ? void 0 : _b.getObjectByName("antennaHead")) || ((_e = (_d = (_c = this.game.resources) == null ? void 0 : _c.vehicle) == null ? void 0 : _d.scene) == null ? void 0 : _e.getObjectByName("antennaHead"));
+      this.antenna.head = e ? e.clone(true) : new Group(), this.antenna.headAxle = this.antenna.head.children[0], this.antenna.headReference = this.antenna.object.getObjectByName("antennaHeadReference"), this.game.materials.updateObject(this.antenna.head), this.game.scene.add(this.antenna.head);
     }
     setBoostTrails() {
       this.boostTrails = {}, this.boostTrails.instance = new Trails(), this.boostTrails.leftReference = new Object3D$1(), this.boostTrails.leftReference.position.set(-1.28, 0.1, -0.55), this.parts.chassis.add(this.boostTrails.leftReference), this.boostTrails.left = this.boostTrails.instance.create(), this.boostTrails.leftReference.getWorldPosition(this.boostTrails.left.position), this.boostTrails.rightReference = new Object3D$1(), this.boostTrails.rightReference.position.set(-1.28, 0.1, 0.55), this.parts.chassis.add(this.boostTrails.rightReference), this.boostTrails.right = this.boostTrails.instance.create(), this.boostTrails.rightReference.getWorldPosition(this.boostTrails.right.position);
@@ -99681,9 +99699,9 @@ THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
           ease: "power1.inOut",
           duration: 1.25 / r,
           overwrite: true
-        }), this.game.world.intro.setText(), this.game.world.intro.setSoundButton(), this.game.ticker.wait(1, () => {
-          this.game.world.intro.showLabel();
-        }), this.game.world.cherryTrees && (this.game.world.cherryTrees.leaves.seeThroughMultiplier = 0.5), location.hash.match(/skip/i)) this.updateStep(1);
+        }), this.game.world.intro && (this.game.world.intro.setText(), this.game.world.intro.setSoundButton(), this.game.ticker.wait(1, () => {
+          this.game.world.intro && this.game.world.intro.showLabel();
+        })), this.game.world.cherryTrees && (this.game.world.cherryTrees.leaves.seeThroughMultiplier = 0.5), location.hash.match(/skip/i)) this.updateStep(1);
         else {
           const s = () => {
             this.updateStep(1), this.game.inputs.events.off("introStart", o), this.game.rayCursor.removeIntersect(h);
@@ -109342,18 +109360,29 @@ ${e.tab}if ( ${m} ) {
       for (const r of this.game.world.visualVehicle.wheels.items) r.painted && (r.painted.material = e);
     }
     equip(e = "gwagon", r = null, s = true) {
-      var _a2, _b, _c, _d, _e, _f;
+      var _a2, _b, _c, _d;
       r && (this.currentColor = r);
       try {
-        ((_a2 = this.game.world) == null ? void 0 : _a2.visualVehicle) && this.game.world.visualVehicle.destroy();
-        let o = null;
-        if (e === "gwagon") o = GWagonBuilder.build(this.currentColor), this.currentType = "gwagon", localStorage.setItem("selectedVehicle", "gwagon"), this.game.physicalVehicle && (this.game.physicalVehicle.engineForceAmplitude = 340, this.game.physicalVehicle.wheels.settings.suspensionStiffness = 32, this.game.physicalVehicle.wheels.settings.frictionSlip = 1.05, this.game.physicalVehicle.wheels.updateSettings()), s && this.game.notifications && this.game.notifications.add("\u{1F699} Mercedes-AMG G 63 Equipped!");
+        ((_a2 = this.game.world) == null ? void 0 : _a2.visualVehicle) && (this.game.world.visualVehicle.destroy(), this.game.world.visualVehicle = null);
+        let o = null, a = "";
+        if (e === "gwagon") o = GWagonBuilder.build(this.currentColor), this.currentType = "gwagon", localStorage.setItem("selectedVehicle", "gwagon"), a = "Mercedes-AMG G 63", this.game.physicalVehicle && (this.game.physicalVehicle.engineForceAmplitude = 340, this.game.physicalVehicle.wheels.settings.suspensionStiffness = 32, this.game.physicalVehicle.wheels.settings.frictionSlip = 1.05, this.game.physicalVehicle.wheels.updateSettings());
         else {
-          !this.buggyTemplate && ((_c = (_b = this.game.resources) == null ? void 0 : _b.vehicle) == null ? void 0 : _c.scene) && (this.buggyTemplate = this.game.resources.vehicle.scene.clone(true));
-          const a = ((_d = this.game.resources) == null ? void 0 : _d.vehicleCleanScene) || ((_f = (_e = this.game.resources) == null ? void 0 : _e.vehicle) == null ? void 0 : _f.scene);
-          o = a ? a.clone(true) : null, this.currentType = "buggy", localStorage.setItem("selectedVehicle", "buggy"), this.game.physicalVehicle && (this.game.physicalVehicle.engineForceAmplitude = 300, this.game.physicalVehicle.wheels.settings.suspensionStiffness = 25, this.game.physicalVehicle.wheels.settings.frictionSlip = 0.9, this.game.physicalVehicle.wheels.updateSettings()), s && this.game.notifications && this.game.notifications.add("\u{1F3CE}\uFE0F Classic Buggy Equipped!");
+          const h = ((_b = this.game.resources) == null ? void 0 : _b.vehicleCleanScene) || ((_d = (_c = this.game.resources) == null ? void 0 : _c.vehicle) == null ? void 0 : _d.scene);
+          o = h ? h.clone(true) : null, this.currentType = "buggy", localStorage.setItem("selectedVehicle", "buggy"), a = "Classic Buggy", this.game.physicalVehicle && (this.game.physicalVehicle.engineForceAmplitude = 300, this.game.physicalVehicle.wheels.settings.suspensionStiffness = 25, this.game.physicalVehicle.wheels.settings.frictionSlip = 0.9, this.game.physicalVehicle.wheels.updateSettings());
         }
-        this.game.world.visualVehicle = new VisualVehicle(o), e === "gwagon" && this.applyCurrentPaint(), this.updateModalUI();
+        if (this.game.world.visualVehicle = new VisualVehicle(o), this.game.physicalVehicle && this.game.physicalVehicle.position && (this.game.world.visualVehicle.parts.chassis.position.copy(this.game.physicalVehicle.position), this.game.world.visualVehicle.parts.chassis.quaternion.copy(this.game.physicalVehicle.quaternion), this.game.world.visualVehicle.update()), e === "gwagon" && this.applyCurrentPaint(), this.updateModalUI(), s && this.game.notifications && typeof this.game.notifications.show == "function") try {
+          const h = `
+                        <div class="top">
+                            <div class="title">Garage</div>
+                        </div>
+                        <div class="bottom">
+                            <div class="description">${a} Equipped!</div>
+                        </div>
+                    `;
+          this.game.notifications.show(h, "garage", 3);
+        } catch (h) {
+          console.warn("Could not display notification:", h);
+        }
       } catch (o) {
         console.error("Failed to equip vehicle:", o);
       }
@@ -109591,7 +109620,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BXN7awym.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CxnZBO1-.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
